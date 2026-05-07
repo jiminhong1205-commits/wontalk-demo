@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>우리금융캐피탈 WON TALK — 시나리오 체험관</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#5B3FE4;--pl:#8B6FFF;--acc:#00C896;--warn:#FFB800;--danger:#FF4757;
+  --bg:#ECEEF5;--sidebar:#16172A;--text:#1A1A2E;--muted:#8890B0;
+  --border:#E2E8F0;--chat-bg:#B8CBD8;--self:#FFE500;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+/* ── SCENE BAR ── */
+.scene-bar{flex-shrink:0;background:var(--sidebar);padding:5px 18px;display:flex;align-items:center;gap:0;overflow-x:auto}
+.sb-i{display:flex;align-items:center;gap:4px;cursor:pointer;padding:0 7px 0 0;white-space:nowrap}
+.sb-i::after{content:'›';color:rgba(255,255,255,.15);font-size:12px;margin-left:5px}
+.sb-i:last-child::after{display:none}
+.sb-d{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.15);color:rgba(255,255,255,.2);font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.sb-l{font-size:10px;color:rgba(255,255,255,.22);font-weight:600;transition:.2s}
+.sb-i.done .sb-d{background:var(--acc);border-color:var(--acc);color:#fff}
+.sb-i.done .sb-l{color:rgba(255,255,255,.4)}
+.sb-i.active .sb-d{background:var(--p);border-color:var(--p);color:#fff;box-shadow:0 0 8px rgba(91,63,228,.5)}
+.sb-i.active .sb-l{color:#fff}
+.sb-title{font-size:11px;color:rgba(255,255,255,.38);margin-left:auto;padding-left:12px;border-left:1px solid rgba(255,255,255,.1);white-space:nowrap;flex-shrink:0}
+
+/* ── HEADER ── */
+.hdr{flex-shrink:0;background:linear-gradient(90deg,#1A1040,#2A1560);padding:7px 20px;display:flex;align-items:center;justify-content:space-between}
+.hdr-brand{color:#fff;font-size:14px;font-weight:800}
+.hdr-brand span{color:#A78BFF}
+.hdr-sub{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+
+/* ── ARENA ── */
+.arena{flex:1;display:grid;grid-template-columns:340px 1fr;gap:14px;padding:11px 20px 5px;overflow:hidden;min-height:0}
+
+/* ── PHONE ── */
+.phone-col{display:flex;flex-direction:column;gap:6px;min-height:0}
+.sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.bg{padding:2px 8px;border-radius:9px;font-size:10px;font-weight:700}
+.bg-g{background:#FFF3CD;color:#856404}.bg-b{background:#D4EDDA;color:#155724}.bg-a{background:#D1ECF1;color:#0C5460}
+.phone{width:320px;flex:1;min-height:0;border-radius:38px;border:8px solid #1C1C1E;box-shadow:0 0 0 1px #3a3a3c,0 18px 48px rgba(0,0,0,.3);overflow:hidden;background:#000;position:relative;display:flex;flex-direction:column}
+.notch{width:108px;height:20px;background:#1C1C1E;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:50;pointer-events:none}
+.player{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;z-index:1;transition:opacity .3s}
+.player.on{opacity:1;pointer-events:all;z-index:10}
+
+/* ══ KAKAO 1:1 CHAT ══ */
+.kakao-screen{background:#B8CBD8;flex:1;display:flex;flex-direction:column}
+.kakao-hdr{background:#3C1E1E;padding:22px 14px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.kakao-back{color:rgba(255,255,255,.7);font-size:14px}
+.kakao-contact{text-align:center;flex:1}
+.kakao-contact-name{font-size:12px;font-weight:700;color:#fff}
+.kakao-contact-sub{font-size:9px;color:rgba(255,255,255,.5)}
+.kakao-menu{color:rgba(255,255,255,.7);font-size:14px}
+.kakao-msgs{flex:1;overflow-y:auto;padding:8px 8px 4px;display:flex;flex-direction:column;gap:6px}
+.kmr{display:flex;gap:6px;align-items:flex-end}
+.kmr.s{flex-direction:row-reverse}
+.kavt{width:30px;height:30px;border-radius:50%;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kcol{display:flex;flex-direction:column;gap:1px;max-width:160px}
+.k-sender{font-size:9px;color:#555;margin-bottom:1px;padding-left:2px}
+.kbbl{background:#fff;padding:7px 9px;border-radius:2px 12px 12px 12px;font-size:11px;line-height:1.45;color:#222;word-break:break-word;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.kmr.s .kbbl{background:#FFE500;border-radius:12px 2px 12px 12px}
+.k-meta{font-size:9px;color:#888;display:flex;gap:2px;margin-top:1px}
+.kmr.s .k-meta{justify-content:flex-end}
+.kakao-input-area{background:#fff;padding:6px 10px;display:flex;align-items:center;gap:8px;flex-shrink:0;border-top:1px solid #ddd}
+.kakao-plus{font-size:18px;color:#888}
+.kakao-inp{flex:1;background:#F5F5F5;border-radius:16px;padding:5px 11px;font-size:11px;color:#aaa}
+.kakao-send{font-size:16px;color:#3C1E1E}
+/* KakaoTalk typing dots */
+.k-typing{display:flex;gap:3px;align-items:center;padding:7px 10px;background:#fff;border-radius:2px 12px 12px 12px;width:42px}
+.k-typing span{width:4px;height:4px;border-radius:50%;background:#ccc;animation:bounce .9s infinite}
+.k-typing span:nth-child(2){animation-delay:.2s}.k-typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* ══ AUTH SCREEN ══ */
+.auth-bg{flex:1;background:#F5F7FA;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 15px 14px}
+.auth-logo{font-size:16px;font-weight:800;color:var(--p);margin-bottom:2px}
+.auth-sub{font-size:10px;color:var(--muted);margin-bottom:14px;text-align:center}
+.auth-card{background:#fff;border-radius:12px;padding:15px;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.08)}
+.auth-step{font-size:10px;color:var(--p);font-weight:700;text-align:center;background:#F0EBFF;padding:4px;border-radius:5px;margin-bottom:9px}
+.auth-lbl{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:3px}
+.auth-inp{width:100%;border:1.5px solid #DDD5FF;border-radius:7px;padding:7px;font-size:14px;font-family:inherit;background:#F8F5FF;margin-bottom:8px;text-align:center;letter-spacing:5px;font-weight:700}
+.auth-btn{width:100%;background:var(--p);color:#fff;border:none;border-radius:7px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.auth-ok{text-align:center;padding:10px}
+.auth-ok-ico{font-size:24px;display:block;margin-bottom:4px}
+.auth-ok-txt{font-size:12px;font-weight:700;color:#155724}
+.auth-footer{font-size:9px;color:#C0C8D8;text-align:center;margin-top:12px;line-height:1.6}
+
+/* ══ WONTALK GROUP CHAT ══ */
+.p-appbar{background:#1C1C1E;padding:22px 12px 5px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.p-appbar-n{font-size:10px;color:#fff;font-weight:700;flex:1;text-align:center}
+.p-head{background:#C2D0DF;padding:6px 11px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.p-head-n{font-size:12px;font-weight:800}
+.p-head-c{font-size:9px;color:var(--muted)}
+.p-notice{background:#fff;margin:3px 5px 1px;border-radius:6px;padding:5px 7px;font-size:10px;color:#333;border-left:3px solid var(--p);display:none;align-items:center;gap:4px;flex-shrink:0}
+.p-notice.show{display:flex;animation:fadeUp .3s ease}
+.p-msgs{flex:1;overflow-y:auto;padding:5px 6px;display:flex;flex-direction:column;gap:4px;min-height:0;background:var(--chat-bg)}
+.p-date{text-align:center;font-size:9px;color:#777;padding:2px 0}
+.pmr{display:flex;gap:4px;align-items:flex-end;animation:fadeUp .2s ease}
+.pmr.s{flex-direction:row-reverse}
+.pavt{width:22px;height:22px;border-radius:50%;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pcol{display:flex;flex-direction:column;gap:1px;max-width:160px}
+.psender{font-size:9px;color:rgba(0,0,0,.45);padding-left:2px}
+.pbbl{background:#fff;padding:6px 8px;border-radius:2px 9px 9px 9px;font-size:11px;line-height:1.45;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08);word-break:break-word}
+.pmr.s .pbbl{background:var(--self);border-radius:9px 2px 9px 9px}
+.pmeta{font-size:9px;color:#888;display:flex;gap:2px}
+.pmr.s .pmeta{justify-content:flex-end}
+/* System msg — no person */
+.p-sys{text-align:center;font-size:9px;color:#666;background:rgba(0,0,0,.08);padding:3px 8px;border-radius:7px;margin:1px 5px;animation:fadeUp .2s ease}
+.p-sys.hi{color:var(--p);background:rgba(91,63,228,.1)}
+/* URL card */
+.p-url-card{background:#fff;border:1px solid #DDD5FF;border-radius:9px;margin:3px 5px;padding:9px;animation:fadeUp .3s ease}
+.p-url-t{font-size:10px;font-weight:800;color:var(--p);margin-bottom:4px}
+.p-url-chip{font-family:monospace;font-size:9px;color:var(--p);background:#EDE9FF;padding:2px 5px;border-radius:4px;display:block;margin-top:2px;word-break:break-all}
+/* Bizform bubble */
+.p-bfm{background:#fff;border:1px solid var(--border);border-radius:9px;padding:7px}
+.p-bfm-t{font-weight:700;color:var(--p);font-size:10px;margin-bottom:3px}
+.p-bfm-r{display:flex;justify-content:space-between;font-size:9px;margin-bottom:2px}
+.p-bfm-l{color:#aaa}
+/* Locked secret */
+.p-locked{background:#FFF0F6;border:1.5px dashed #FFB3D1;padding:7px 9px;border-radius:2px 9px 9px 9px;font-size:11px;cursor:pointer;transition:.2s}
+.p-locked:hover{background:#FFE4EF}
+.p-locked.revealed{border-style:solid;border-color:#E91E8C;cursor:default}
+.p-locked .lock-ico{font-size:13px;display:block;margin-bottom:2px}
+.p-locked .lock-hint{font-size:9px;color:#C2185B;margin-top:2px}
+/* Scene sep */
+.p-sep{text-align:center;font-size:9px;color:var(--p);background:rgba(91,63,228,.08);border:1px solid rgba(91,63,228,.12);padding:3px 8px;border-radius:7px;margin:3px 5px;font-weight:700}
+/* Typing */
+.p-tr{display:flex;gap:4px;align-items:flex-end}
+.p-dots{display:flex;gap:3px;align-items:center;padding:5px 8px;background:#fff;border-radius:2px 9px 9px 9px;width:38px}
+.p-dots span{width:4px;height:4px;border-radius:50%;background:#ccc;animation:bounce .9s infinite}
+.p-dots span:nth-child(2){animation-delay:.2s}.p-dots span:nth-child(3){animation-delay:.4s}
+
+/* Bizform overlay */
+.p-bf-layer{background:#F5F7FA;flex-direction:column}
+.p-bf-hdr{background:var(--p);padding:22px 12px 8px;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px;flex-shrink:0}
+.p-bf-back{cursor:pointer;font-size:14px;opacity:.8}
+.p-bf-body{flex:1;overflow-y:auto;padding:11px}
+.fg{margin-bottom:9px}
+.fg label{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:3px}
+.fg label em{color:var(--danger)}
+.fg input,.fg select{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:7px 9px;font-size:12px;font-family:inherit;background:#fff}
+.fg input.filled{background:#F0FFF4;border-color:#B3E5D4}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--p);background:#F8F5FF}
+.bf-sub{width:100%;background:var(--p);color:#fff;border:none;border-radius:9px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:3px}
+.bf-auto-note{font-size:9px;color:var(--acc);margin-bottom:8px;text-align:center;background:#F0FFF8;padding:4px;border-radius:5px}
+
+/* Tasks overlay */
+.p-tasks-layer{background:#F5F7FA;flex-direction:column}
+.p-ts-hdr{background:#fff;padding:22px 12px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
+.p-ts-title{font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px}
+.p-ts-back{cursor:pointer;font-size:13px;color:var(--muted)}
+.ts-filters{display:flex;gap:5px;margin-top:5px}
+.tf{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;background:var(--bg);color:var(--muted);cursor:pointer;border:none;font-family:inherit}
+.tf.on{background:var(--p);color:#fff}
+.ts-list{flex:1;overflow-y:auto;padding:10px 8px 24px;display:flex;flex-direction:column;gap:6px}
+.tc{background:#fff;border-radius:10px;padding:10px;border-left:4px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.05);cursor:pointer;transition:.15s;min-height:72px}
+.tc:hover{transform:translateX(2px)}
+.tc.pend{border-left-color:var(--warn)}.tc.prog{border-left-color:var(--p)}.tc.done{border-left-color:var(--acc)}
+.tc-t{font-size:11px;font-weight:700;margin-bottom:2px}
+.tc-s{font-size:10px;color:var(--muted);margin-bottom:4px}
+.tc-b{font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px}
+.tc.pend .tc-b{color:#856404}.tc.prog .tc-b{color:var(--p)}.tc.done .tc-b{color:var(--acc)}
+.tc-jump{font-size:9px;color:var(--muted);margin-left:auto}
+
+/* Secret overlay */
+.p-sec-layer{background:rgba(0,0,0,.65);flex-direction:column;justify-content:flex-end}
+.p-sec-sheet{background:#fff;border-radius:16px 16px 0 0;padding:16px 14px;flex-shrink:0}
+.p-sec-title{font-size:13px;font-weight:800;color:#C2185B;margin-bottom:8px}
+.p-sec-to{font-size:10px;color:var(--muted);margin-bottom:5px}
+.p-sec-inp{width:100%;border:1.5px solid #FFB3D1;border-radius:8px;padding:8px 10px;font-size:11px;font-family:inherit;background:#FFF9FB;margin-bottom:8px}
+.p-sec-inp:focus{outline:none;border-color:#E91E8C}
+.p-sec-row{display:flex;gap:7px}
+.p-sec-cancel{flex:1;background:var(--bg);border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.p-sec-send{flex:2;background:#E91E8C;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* ── WORKSPACE ── */
+.ws-col{display:flex;flex-direction:column;gap:6px;min-height:0}
+.workspace{flex:1;min-height:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.07);display:grid;grid-template-columns:188px 1fr 230px}
+
+/* Sidebar */
+.ws-side{background:var(--sidebar);display:flex;flex-direction:column;overflow:hidden}
+.ws-shdr{padding:10px 10px 8px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ws-logo{font-size:11px;font-weight:800;color:#fff}
+.ws-online{font-size:9px;color:var(--acc);background:rgba(0,200,150,.15);padding:2px 6px;border-radius:6px;margin-left:auto}
+.ws-sec-t{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.2);padding:5px 10px 2px;flex-shrink:0}
+.ws-rooms{flex:1;overflow-y:auto;padding:0 4px}
+.ws-rm{padding:7px 8px;display:flex;align-items:center;gap:6px;cursor:pointer;border-radius:7px;margin-bottom:2px;transition:.15s}
+.ws-rm:hover,.ws-rm.on{background:rgba(255,255,255,.08)}
+.ws-rav{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.ws-ri{flex:1;min-width:0}
+.ws-rn{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws-rp{font-size:9px;color:rgba(255,255,255,.28);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws-unr{background:var(--p);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:6px;flex-shrink:0}
+.ws-dash-item{padding:8px 10px;display:flex;align-items:center;gap:7px;cursor:pointer;border-radius:7px;margin:4px 4px 2px;border-top:1px solid rgba(255,255,255,.06);padding-top:10px;transition:.15s}
+.ws-dash-item:hover,.ws-dash-item.on{background:rgba(255,255,255,.08)}
+.ws-dash-ico{width:25px;height:25px;border-radius:7px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ws-dash-lbl{font-size:11px;color:rgba(255,255,255,.55);font-weight:600}
+.ws-dash-item.on .ws-dash-lbl{color:#fff}.ws-dash-item.on .ws-dash-ico{background:var(--p)}
+
+/* Center */
+.ws-center{display:flex;flex-direction:column;border-left:1px solid #F0F3FA;border-right:1px solid #F0F3FA;min-height:0}
+#chat-view{display:flex;flex-direction:column;flex:1;min-height:0}
+.ws-chdr{padding:9px 13px;border-bottom:1px solid #F0F3FA;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ws-cname{font-size:13px;font-weight:700}
+.ws-nbar{background:#F8F5FF;border-left:3px solid var(--p);padding:7px 12px;font-size:11px;color:#5B3FE4;display:none;align-items:center;justify-content:space-between;flex-shrink:0}
+.ws-nbar.show{display:flex}
+.ws-nbar-cnt{font-size:10px;font-weight:700;background:#EDE9FF;padding:2px 7px;border-radius:6px;cursor:pointer}
+.ws-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;background:#FAFBFD;min-height:0}
+.ws-mr{display:flex;gap:7px;animation:fadeUp .2s ease}
+.ws-mr.s{flex-direction:row-reverse}
+.ws-av{width:28px;height:28px;border-radius:50%;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ws-mc{max-width:280px}
+.ws-mn{font-size:10px;color:var(--muted);margin-bottom:2px}
+.ws-bbl{background:#fff;border:1px solid #F0F3FA;padding:7px 11px;border-radius:3px 12px 12px 12px;font-size:12px;line-height:1.55;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.04);word-break:break-word}
+.ws-mr.s .ws-bbl{background:#F0EBFF;border-color:#DDD5FF;border-radius:12px 3px 12px 12px}
+.ws-meta{font-size:9px;color:#B0B8CC;margin-top:2px;display:flex;gap:4px}
+.ws-mr.s .ws-meta{justify-content:flex-end}
+.ws-sys{text-align:center;font-size:10px;color:#8890B0;background:#F0F3FA;padding:3px 10px;border-radius:12px;margin:0 auto}
+.ws-sys.hi{color:var(--p);background:#F0EBFF;border:1px solid #DDD5FF}
+.ws-url-card{border:1px solid #DDD5FF;border-radius:10px;padding:10px;background:#F8F5FF;animation:fadeUp .3s ease}
+.ws-url-t{font-weight:700;color:var(--p);font-size:12px;margin-bottom:5px}
+.ws-url-chip{font-family:monospace;font-size:11px;font-weight:700;background:#fff;padding:2px 6px;border-radius:4px;border:1px solid #DDD5FF;display:inline-block;margin-top:3px}
+.ws-bfm-g{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
+.ws-bff{display:flex;flex-direction:column;gap:1px}
+.ws-bff label{font-size:9px;color:var(--muted);text-transform:uppercase}
+.ws-bff span{font-size:12px;font-weight:700}
+.ws-assign{background:#F0FFF8;border:1px solid #B3E5D4;border-radius:10px;padding:9px 12px;font-size:11px;line-height:1.7;color:#155724;animation:fadeUp .2s ease}
+.ws-sec-bbl{background:#FFF0F6;border:1px dashed #FFB3D1;padding:8px 11px;border-radius:3px 12px 12px 12px;font-size:11px;color:#C2185B}
+.ws-sep{text-align:center;font-size:10px;color:var(--p);background:rgba(91,63,228,.06);border:1px solid rgba(91,63,228,.12);padding:4px 12px;border-radius:8px;margin:0 auto;font-weight:700}
+.ws-tr{display:flex;gap:7px}
+.ws-dots{display:flex;gap:3px;align-items:center;padding:7px 10px;background:#fff;border:1px solid #F0F3FA;border-radius:3px 12px 12px 12px;width:44px}
+.ws-dots span{width:4px;height:4px;border-radius:50%;background:#ccc;animation:bounce .9s infinite}
+.ws-dots span:nth-child(2){animation-delay:.2s}.ws-dots span:nth-child(3){animation-delay:.4s}
+/* KakaoTalk notification in workspace */
+.ws-kakao-notif{background:#FAE100;border-radius:9px;padding:10px 12px;animation:fadeUp .3s ease}
+.ws-kakao-notif-t{font-size:9px;font-weight:700;color:#3C1E1E;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.ws-kakao-notif-body{font-size:11px;color:#3C1E1E;line-height:1.5}
+.ws-inp-area{border-top:1px solid #F0F3FA;padding:8px 11px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ws-inpf{flex:1;background:#F0F3FA;border:none;border-radius:7px;padding:6px 10px;font-size:12px;font-family:inherit}
+.ws-inpf:focus{outline:none;background:#EDE9FF}
+.ws-send{background:var(--p);color:#fff;border:none;padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-weight:600;font-family:inherit}
+
+/* Dashboard */
+#dash-view{display:none;flex-direction:column;flex:1;min-height:0}
+.dash-hdr{padding:10px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dash-title{font-size:13px;font-weight:800}
+.dash-back{font-size:11px;color:var(--p);cursor:pointer;font-weight:700;padding:3px 9px;border-radius:7px;background:#F0EBFF;border:none;font-family:inherit}
+.dash-tabs{display:flex;padding:0 13px;border-bottom:1px solid var(--border);flex-shrink:0}
+.dash-tab{padding:8px 16px;border:none;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;font-weight:600;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:.2s}
+.dash-tab.on{color:var(--p);border-bottom-color:var(--p)}
+.dash-content{flex:1;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:8px;background:#FAFBFD}
+.dash-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.dash-sum-c{background:#fff;border-radius:9px;padding:10px;border:1px solid var(--border);text-align:center}
+.dash-sum-v{font-size:20px;font-weight:800;color:var(--p)}
+.dash-sum-l{font-size:10px;color:var(--muted);margin-top:2px}
+.dash-sec-t{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dash-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fff;border-radius:9px;cursor:pointer;border:1px solid var(--border);transition:.15s}
+.dash-row:hover{border-color:var(--p);background:#F8F5FF;transform:translateX(2px)}
+.dash-row-name{font-size:12px;font-weight:700;width:72px;flex-shrink:0}
+.dash-bw{flex:1;height:19px;background:#F0F3FA;border-radius:4px;overflow:hidden}
+.dash-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:5px;font-size:9px;font-weight:700;color:#fff}
+.dash-cnt{font-size:12px;font-weight:800;width:30px;text-align:right}
+.dash-badge{font-size:9px;padding:2px 7px;border-radius:7px;flex-shrink:0}
+.ok-badge{background:#D4EDDA;color:#155724}.warn-badge{background:#FFF3CD;color:#856404}
+
+/* Right panel */
+.ws-right{overflow-y:auto;padding:10px;background:#FAFBFD;display:flex;flex-direction:column;gap:6px;min-width:0}
+.rp-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);padding-bottom:5px;border-bottom:1px solid var(--border)}
+.rcard{background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px}
+.rc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.rc-t{font-size:11px;font-weight:700}
+.sbdg{padding:2px 7px;border-radius:7px;font-size:10px;font-weight:700}
+.sw{background:#FFF3CD;color:#856404}.sp{background:#D4EDDA;color:#155724}.sd{background:#D1ECF1;color:#0C5460}
+.rc-m{font-size:10px;color:var(--muted);line-height:1.5}
+.crm-box{background:#F0EBFF;border:1px solid #DDD5FF;border-radius:9px;padding:9px}
+.crm-t{font-size:9px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.crm-r{margin-bottom:3px}
+.crm-l{font-size:9px;color:var(--muted)}
+.crm-v{font-size:11px;font-weight:700;font-family:monospace;color:var(--p)}
+.crm-v.n{font-family:inherit;color:var(--text)}
+.inv-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.inv-avt{width:26px;height:26px;border-radius:50%;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.inv-info{flex:1;min-width:0}
+.inv-name{font-size:11px;font-weight:700}
+.inv-sub{font-size:9px;color:var(--muted)}
+.inv-btn{background:var(--p);color:#fff;border:none;border-radius:7px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.inv-done{font-size:10px;color:var(--acc);font-weight:700}
+.nr-card{background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px}
+.nr-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.nr-num{font-size:20px;font-weight:800;color:var(--p)}
+.nr-tot{font-size:10px;color:var(--muted)}
+.prog{height:6px;background:#F0F3FA;border-radius:3px;overflow:hidden;margin-bottom:6px}
+.progf{height:100%;background:linear-gradient(90deg,var(--p),var(--pl));border-radius:3px;transition:width 1.2s ease}
+.resend{width:100%;padding:6px;background:#FFF3CD;border:1px solid #FFE69C;color:#856404;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
+.detail-card{background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px}
+.detail-title{font-size:13px;font-weight:800;margin-bottom:7px;color:var(--p)}
+.detail-stat{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #F5F5F5;font-size:11px}
+.detail-lbl{color:var(--muted)}
+.detail-val{font-weight:700}
+.detail-li{display:flex;justify-content:space-between;padding:4px 6px;border-radius:6px;font-size:11px;cursor:pointer}
+.detail-li:hover{background:#F0F3FA}
+
+/* ── DOCK ── */
+.dock{flex-shrink:0;background:#fff;border-top:2px solid var(--border);padding:7px 20px 6px;display:flex;flex-direction:column;gap:5px}
+.dock-r1{display:flex;align-items:center;gap:8px}
+.role-sw{display:flex;background:var(--bg);border-radius:18px;padding:3px;gap:2px;flex-shrink:0}
+.rsb{padding:4px 10px;border-radius:13px;border:none;background:none;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;white-space:nowrap}
+.rsb.on{background:#fff;color:var(--text);box-shadow:0 1px 5px rgba(0,0,0,.12)}
+.msg-inp{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-family:inherit;background:#FAFBFD;color:var(--text)}
+.msg-inp:focus{outline:none;border-color:var(--p);background:#fff}
+.msg-inp::placeholder{color:var(--muted);font-style:italic;font-size:11px}
+.send-btn{background:var(--p);color:#fff;border:none;border-radius:18px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+/* Narrator bar */
+.narr{background:linear-gradient(90deg,#F0EBFF,#F8F5FF);border:1px solid #DDD5FF;border-radius:9px;padding:5px 12px;font-size:11px;color:#5B3FE4;font-style:italic;display:flex;align-items:center;gap:8px}
+.narr-ico{font-size:12px;flex-shrink:0}
+/* Chips */
+.chips-row{display:flex;gap:5px;overflow-x:auto;padding-bottom:1px;align-items:center;min-height:26px}
+.chip-lbl{font-size:10px;color:var(--muted);font-weight:700;white-space:nowrap;flex-shrink:0}
+.chip{padding:5px 11px;border-radius:13px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;max-width:245px;overflow:hidden;text-overflow:ellipsis;transition:.15s;font-family:inherit;flex-shrink:0;border:1.5px solid}
+.chip.g{border-color:var(--p);color:var(--p);background:#F8F5FF}.chip.g:hover{background:var(--p);color:#fff}
+.chip.b{border-color:#155724;color:#155724;background:#F0FFF4}.chip.b:hover{background:#155724;color:#fff}
+.chip.a{border-color:#0C5460;color:#0C5460;background:#F0FBFF}.chip.a:hover{background:#0C5460;color:#fff}
+.chip.w{border-color:var(--danger);color:var(--danger);background:#FFF5F5}.chip.w:hover{background:var(--danger);color:#fff}
+.chip.k{border-color:#3C1E1E;color:#3C1E1E;background:#FFF9E6}.chip.k:hover{background:#FAE100;border-color:#FAE100}
+.chip:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.next-btn{padding:5px 14px;border-radius:13px;border:2px solid var(--acc);color:var(--acc);background:#F0FFF8;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;animation:pulse 1.5s ease infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,200,150,.3)}50%{box-shadow:0 0 0 6px rgba(0,200,150,0)}}
+.dock-r3{display:flex;align-items:center;gap:5px;overflow-x:auto}
+.fc{padding:4px 10px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.2s;font-family:inherit}
+.fc:hover{border-color:var(--p);color:var(--p);background:#F8F5FF}
+.fc-sec{border-color:#FFB3D1;color:#C2185B;background:#FFF9FB}.fc-sec:hover{background:#FFF0F6;border-color:#E91E8C}
+.fc-not{border-color:#B8D4FF;color:#1565C0;background:#F5FAFF}.fc-not:hover{background:#EBF4FF;border-color:#1565C0}
+.api-note{margin-left:auto;font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;padding:3px 9px;background:#F8F5FF;border-radius:9px;border:1px dashed #DDD5FF}
+
+/* Modals */
+.warn-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:none}
+.warn-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:14px;padding:19px 21px;box-shadow:0 8px 40px rgba(0,0,0,.2);z-index:1000;text-align:center;display:none;max-width:275px;width:88%;animation:popIn .25s ease}
+@keyframes popIn{from{transform:translate(-50%,-50%) scale(.9);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.warn-ico{font-size:26px;margin-bottom:7px}
+.warn-title{font-size:13px;font-weight:800;color:var(--danger);margin-bottom:5px}
+.warn-desc{font-size:11px;color:#555;line-height:1.6;margin-bottom:11px}
+.warn-btn{background:var(--p);color:#fff;border:none;border-radius:9px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
+.alim{position:fixed;top:50%;right:16px;transform:translateY(-50%);background:#fff;border-radius:13px;padding:13px;box-shadow:0 8px 40px rgba(0,0,0,.2);z-index:1000;width:232px;display:none;animation:slideL .3s ease}
+@keyframes slideL{from{transform:translateY(-50%) translateX(30px);opacity:0}to{transform:translateY(-50%) translateX(0);opacity:1}}
+.alim-hdr{background:#FFE500;border-radius:7px;padding:5px 9px;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.alim-from{font-size:10px;font-weight:700;color:#3C1E1E}
+.alim-badge{font-size:9px;background:rgba(60,30,30,.15);color:#3C1E1E;padding:1px 5px;border-radius:4px;margin-left:auto}
+.alim-body{font-size:11px;color:#444;line-height:1.6;margin-bottom:8px}
+.alim-btn{width:100%;background:#FFE500;color:#3C1E1E;border:none;border-radius:7px;padding:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.alim-close{position:absolute;top:7px;right:9px;background:none;border:none;font-size:14px;cursor:pointer;color:#999}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- SCENE BAR -->
+<div class="scene-bar">
+  <div class="sb-i active" id="sb1" onclick="gotoScene(1)"><span class="sb-d">1</span><span class="sb-l">인증 초대</span></div>
+  <div class="sb-i" id="sb2" onclick="gotoScene(2)"><span class="sb-d">2</span><span class="sb-l">비즈폼</span></div>
+  <div class="sb-i" id="sb3" onclick="gotoScene(3)"><span class="sb-d">3</span><span class="sb-l">URL 추적</span></div>
+  <div class="sb-i" id="sb4" onclick="gotoScene(4)"><span class="sb-d">4</span><span class="sb-l">자동 할당</span></div>
+  <div class="sb-i" id="sb5" onclick="gotoScene(5)"><span class="sb-d">5</span><span class="sb-l">할일 목록</span></div>
+  <div class="sb-i" id="sb6" onclick="gotoScene(6)"><span class="sb-d">6</span><span class="sb-l">비밀 메시지</span></div>
+  <div class="sb-i" id="sb7" onclick="gotoScene(7)"><span class="sb-d">7</span><span class="sb-l">공지+읽음</span></div>
+  <div class="sb-i" id="sb8" onclick="gotoScene(8)"><span class="sb-d">8</span><span class="sb-l">대시보드</span></div>
+  <div class="sb-title" id="sb-title">🎬 SCENE 1 — "아무나 못 들어옵니다"</div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="hdr-brand">우리금융캐피탈 <span>WON TALK</span> 자동차금융 업무 시스템</div>
+    <div class="hdr-sub">Cowork+ 기반 AG 파트너 협업 플랫폼 — 8장면 시나리오 체험관</div>
+  </div>
+</div>
+
+<!-- ARENA -->
+<div class="arena">
+  <!-- PHONE -->
+  <div class="phone-col">
+    <div class="sec-lbl" id="phone-lbl">📱 파트너(AG) 화면 <span class="bg bg-g">GUEST</span></div>
+    <div class="phone">
+      <div class="notch"></div>
+
+      <!-- ① KAKAO 1:1 CHAT (Scene 1 시작) -->
+      <div class="player on" id="pl-kakao">
+        <div class="kakao-screen">
+          <div class="kakao-hdr">
+            <span class="kakao-back">←</span>
+            <div class="kakao-contact">
+              <div class="kakao-contact-name">김경화 ☆</div>
+              <div class="kakao-contact-sub">우리금융캐피탈</div>
+            </div>
+            <span class="kakao-menu">≡</span>
+          </div>
+          <div class="kakao-msgs" id="kakao-msgs">
+            <div style="text-align:center;font-size:9px;color:#777;padding:4px">2026년 7월 8일</div>
+          </div>
+          <div class="kakao-input-area">
+            <span class="kakao-plus">+</span>
+            <div class="kakao-inp">메시지를 입력하세요</div>
+            <span class="kakao-send">➤</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② 알림톡 수신 화면 (초대 후) -->
+      <div class="player" id="pl-alimtalk">
+        <div style="flex:1;background:#EBEBEB;display:flex;flex-direction:column">
+          <div style="background:#1C1C1E;padding:22px 14px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+            <span style="color:rgba(255,255,255,.5);font-size:13px">←</span>
+            <span style="color:#fff;font-size:11px;font-weight:700">알림</span>
+            <span style="width:16px"></span>
+          </div>
+          <div style="flex:1;padding:14px;display:flex;flex-direction:column;gap:8px">
+            <!-- KakaoTalk 알림톡 card -->
+            <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.12)">
+              <div style="background:#FAE100;padding:10px 12px;display:flex;align-items:center;gap:8px">
+                <div style="width:26px;height:26px;border-radius:7px;background:#3C1E1E;display:flex;align-items:center;justify-content:center;font-size:12px">💬</div>
+                <div>
+                  <div style="font-size:11px;font-weight:800;color:#3C1E1E">우리금융캐피탈</div>
+                  <div style="font-size:9px;color:rgba(60,30,30,.6)">채널 입장 초대</div>
+                </div>
+                <div style="margin-left:auto;font-size:9px;background:rgba(60,30,30,.15);color:#3C1E1E;padding:2px 7px;border-radius:8px;font-weight:700">알림톡</div>
+              </div>
+              <div style="padding:14px">
+                <div style="font-size:11px;font-weight:800;color:#1A1A2E;margin-bottom:8px">[채널 입장 초대]</div>
+                <div style="font-size:11px;color:#444;line-height:1.7;margin-bottom:12px">
+                  <b>에이원오토 영업팀</b> 채널에<br>초대되었습니다.<br><br>
+                  본인 인증 후 채널에 입장하실<br>수 있습니다.
+                </div>
+                <div style="background:#F5F5F5;border-radius:7px;padding:8px 10px;font-size:10px;color:#888;margin-bottom:12px">
+                  ※ 기간계 조직도 인증 후 자동 입장<br>
+                  ※ 미인가자 자동 차단
+                </div>
+                <button onclick="showLayer('pl-auth')" style="width:100%;background:#FAE100;color:#3C1E1E;border:none;border-radius:8px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit">
+                  인증하기 ▶
+                </button>
+              </div>
+            </div>
+            <div style="font-size:9px;color:#999;text-align:center">우리금융캐피탈 WON TALK 발송</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ SMS AUTH -->
+      <div class="player" id="pl-auth">
+        <div class="auth-bg">
+          <div class="auth-logo">WON TALK</div>
+          <div class="auth-sub">우리금융캐피탈 파트너 업무 채널</div>
+          <div class="auth-card" id="auth-form">
+            <div class="auth-step">📨 초대장이 도착했습니다</div>
+            <div class="auth-lbl">인증번호 6자리</div>
+            <input class="auth-inp" value="4 8 5 7 2 9" readonly>
+            <button class="auth-btn" onclick="doAuth()">인증 완료 → 채널 입장</button>
+          </div>
+          <div id="auth-done" class="hide auth-card">
+            <div class="auth-ok"><span class="auth-ok-ico">✅</span><div class="auth-ok-txt">인증 완료 · 입장 중...</div></div>
+          </div>
+          <div class="auth-footer">우리금융캐피탈 WON TALK<br>Copyright © Spectra Inc.</div>
+        </div>
+      </div>
+
+      <!-- ③ WON TALK GROUP CHAT -->
+      <div class="player" id="pl-chat">
+        <div class="p-appbar">
+          <span style="color:rgba(255,255,255,.4);font-size:12px">✕</span>
+          <div class="p-appbar-n">WON TALK — Guest</div>
+          <div style="width:20px;height:20px;border-radius:50%;background:#FFE500;display:flex;align-items:center;justify-content:center;font-size:9px">💬</div>
+        </div>
+        <div class="p-head">
+          <div><div class="p-head-n">에이원오토 영업팀</div><div class="p-head-c">👥 11명</div></div>
+          <div style="font-size:14px;color:var(--muted)">🔍</div>
+        </div>
+        <div class="p-notice" id="p-notice"><span id="p-notice-txt"></span></div>
+        <div class="p-msgs" id="p-msgs"></div>
+      </div>
+
+      <!-- ④ BIZFORM -->
+      <div class="player p-bf-layer" id="pl-bf">
+        <div class="p-bf-hdr"><span class="p-bf-back" onclick="showLayer('pl-chat')">←</span>📋 대출 승인 신청</div>
+        <div class="p-bf-body">
+          <div class="bf-auto-note">✨ 고객 정보가 자동 입력되었습니다</div>
+          <div class="fg"><label>고객명 <em>*</em></label><input id="bf-name" class="filled" value="홍길동" readonly></div>
+          <div class="fg"><label>희망 상품 <em>*</em></label><select id="bf-prod"><option>자동차 할부금융</option><option>오토론</option><option>리스</option></select></div>
+          <div class="fg"><label>차량 모델 <em>*</em></label><input id="bf-car" class="filled" value="현대 아이오닉6 (2026)" readonly></div>
+          <div class="fg"><label>희망 금액</label><input id="bf-amt" class="filled" value="3,500만원" readonly></div>
+          <div class="fg"><label>연락처</label><input id="bf-tel" placeholder="010-0000-0000"></div>
+          <button class="bf-sub" onclick="submitBf()">✅ 제출하기</button>
+        </div>
+      </div>
+
+      <!-- ⑤ 내 대화 보기 -->
+      <div class="player p-tasks-layer" id="pl-tasks">
+        <div class="p-ts-hdr">
+          <div class="p-ts-title"><span class="p-ts-back" onclick="showLayer('pl-chat')">←</span>💬 내 대화 보기</div>
+          <div class="ts-filters">
+            <button class="tf on" onclick="filterTf(this,'all')">전체</button>
+            <button class="tf" onclick="filterTf(this,'prog')">진행중</button>
+            <button class="tf" onclick="filterTf(this,'done')">완료</button>
+          </div>
+        </div>
+        <div class="ts-list" id="ts-list"></div>
+      </div>
+
+      <!-- ⑥ SECRET -->
+      <div class="player p-sec-layer" id="pl-secret" onclick="if(event.target===this)showLayer('pl-chat')">
+        <div class="p-sec-sheet">
+          <div class="p-sec-title">🔒 비밀 메시지</div>
+          <div class="p-sec-to" id="sec-to">수신자: <b>박대표 (단체방 내 전용)</b></div>
+          <textarea class="p-sec-inp" id="sec-inp" rows="3" placeholder="비밀로 전달할 내용..."></textarea>
+          <div class="p-sec-row">
+            <button class="p-sec-cancel" onclick="showLayer('pl-chat')">취소</button>
+            <button class="p-sec-send" onclick="sendSecret()">🔒 비밀 전송</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSPACE -->
+  <div class="ws-col">
+    <div class="sec-lbl">🖥 Spectra Workspace <span class="bg bg-b" id="ws-role-badge">우리금융캐피탈 BR</span></div>
+    <div class="workspace">
+      <div class="ws-side">
+        <div class="ws-shdr"><div class="ws-logo">우리금융캐피탈</div><div class="ws-online">● 근무중</div></div>
+        <!-- 운영현황 (대화방보다 위에) -->
+        <div class="ws-sec-t">운영현황</div>
+        <div style="padding:0 4px 6px">
+          <div class="ws-rm" id="ws-dash-menu" onclick="toggleDash()">
+            <div class="ws-rav" style="background:#0C5460">📊</div>
+            <div class="ws-ri">
+              <div class="ws-rn">채널 대시보드</div>
+              <div class="ws-rp">AG별 · BR별 현황</div>
+            </div>
+          </div>
+        </div>
+        <div class="ws-sec-t">대화방</div>
+        <div class="ws-rooms">
+          <div class="ws-rm on"><div class="ws-rav" style="background:var(--p)">에</div><div class="ws-ri"><div class="ws-rn">에이원오토 영업팀</div><div class="ws-rp">이현수: 좋은 아침입니다!</div></div><div class="ws-unr" id="ws-badge">3</div></div>
+          <div class="ws-rm"><div class="ws-rav" style="background:#E67E22">현</div><div class="ws-ri"><div class="ws-rn">현대모터스 강남점</div><div class="ws-rp">서류 보완 완료했어요</div></div></div>
+          <div class="ws-rm"><div class="ws-rav" style="background:#27AE60">기</div><div class="ws-ri"><div class="ws-rn">기아오토 판교점</div><div class="ws-rp">승인 결과 언제쯤...</div></div><div class="ws-unr">1</div></div>
+          <div class="ws-rm"><div class="ws-rav" style="background:#E74C3C">삼</div><div class="ws-ri"><div class="ws-rn">삼성오토 신촌점</div><div class="ws-rp">비즈폼 제출했습니다</div></div></div>
+          <div class="ws-rm"><div class="ws-rav" style="background:#8E44AD">센</div><div class="ws-ri"><div class="ws-rn">센트럴오토 강동점</div><div class="ws-rp">금리 문의드립니다</div></div></div>
+        </div>
+      </div>
+
+      <div class="ws-center">
+        <div id="chat-view">
+          <div class="ws-chdr"><div class="ws-cname">에이원오토 영업팀 👥 11</div><div style="font-size:13px;color:var(--muted)">🔍 👤 ⋯</div></div>
+          <div class="ws-nbar" id="ws-nbar"><span id="ws-nbar-txt">공지</span><span class="ws-nbar-cnt" id="ws-read-cnt" onclick="showReadPanel()">집계 중...</span></div>
+          <div class="ws-msgs" id="ws-msgs"></div>
+          <div class="ws-inp-area">
+            <input class="ws-inpf" id="ws-inp-f" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendWs()}">
+            <button class="ws-send" onclick="sendWs()">보내기</button>
+          </div>
+        </div>
+        <div id="dash-view">
+          <div class="dash-hdr"><div class="dash-title">📊 채널영업센터 대시보드</div><button class="dash-back" onclick="toggleDash()">← 채팅으로</button></div>
+          <div class="dash-tabs">
+            <button class="dash-tab on" id="tab-ag" onclick="showDashTab('ag')">AG사별</button>
+            <button class="dash-tab" id="tab-br" onclick="showDashTab('br')">BR 직원별</button>
+          </div>
+          <div class="dash-content" id="dash-content"></div>
+        </div>
+      </div>
+
+      <div class="ws-right" id="ws-right">
+        <div class="rp-title">시나리오 가이드</div>
+        <div style="background:linear-gradient(135deg,#F8F5FF,#F0EBFF);border:1px solid #DDD5FF;border-radius:9px;padding:9px" id="hint-box"><div id="hint-body"></div></div>
+        <div id="dynamic-panel"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOCK -->
+<div class="dock">
+  <div class="dock-r1">
+    <div class="role-sw">
+      <button class="rsb on" id="rb-g" onclick="setRole('guest')">📱 박대표</button>
+      <button class="rsb" id="rb-b" onclick="setRole('br')">🖥 김경화 BR</button>
+      <button class="rsb" id="rb-a" onclick="setRole('admin')">👔 최센터장</button>
+    </div>
+    <input class="msg-inp" id="main-inp" placeholder="아래 대사를 선택하거나 직접 입력" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFree()}">
+    <button class="send-btn" onclick="sendFree()">전송 ▶</button>
+  </div>
+  <div class="narr" id="narr-bar"><span class="narr-ico">🎬</span><span id="narr-txt">박대표가 이직 후 WON TALK 채널에 입장하려 합니다. 먼저 기존 방식대로 김경화에게 카카오톡으로 연락합니다.</span></div>
+  <div class="chips-row" id="chips-row"><span class="chip-lbl">💬 대사:</span></div>
+  <div class="dock-r3">
+    <button class="fc" id="fc-bf" onclick="openBf()">📋 비즈폼 작성</button>
+    <button class="fc fc-sec" onclick="openSecret()">🔒 비밀 메시지</button>
+    <button class="fc" onclick="openTasks()">💬 내 대화 보기</button>
+    <button class="fc fc-not hide" id="fc-not" onclick="pinNotice()">📢 공지 등록</button>
+    <div class="api-note">🔧 시스템 확정 후 AI 자동응답 API 연동 예정</div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="warn-ov" id="warn-ov" onclick="closeWarn()"></div>
+<div class="warn-toast" id="warn-toast">
+  <div class="warn-ico">🚫</div>
+  <div class="warn-title">개인정보 전송 차단</div>
+  <div class="warn-desc">주민번호·계좌번호 등 개인정보는<br>단체 채팅 텍스트 전송이 <b>자동 차단</b>됩니다.<br><br><b>[비즈폼 작성]</b> 버튼을 이용해 주세요.</div>
+  <button class="warn-btn" onclick="closeWarn();openBf()">📋 비즈폼으로 안전하게 접수</button>
+</div>
+<div class="alim" id="alim">
+  <button class="alim-close" onclick="document.getElementById('alim').style.display='none'">✕</button>
+  <div class="alim-hdr"><span style="font-size:12px">💬</span><div class="alim-from">우리금융캐피탈</div><div class="alim-badge">알림톡</div></div>
+  <div class="alim-body" id="alim-body"></div>
+  <button class="alim-btn">채팅방 이동하기 ▶</button>
+</div>
+
+<script>
+// ── CAST ──
+const C = {
+  박대표:  {i:'박', c:'#5B3FE4', r:'guest', l:'박대표 (파트너)'},
+  이현수:  {i:'이', c:'#27AE60', r:'other', l:'이현수 (파트너)'},
+  최영호:  {i:'최', c:'#E67E22', r:'other', l:'최영호 (파트너)'},
+  박소연:  {i:'소', c:'#E91E8C', r:'other', l:'박소연 (파트너)'},
+  김철민:  {i:'철', c:'#8E44AD', r:'other', l:'김철민 (파트너)'},
+  김경화:  {i:'김', c:'#2C3E50', r:'br',    l:'김경화 (금리·대출 담당)'},
+  이과장:  {i:'이', c:'#1A5276', r:'br',    l:'이과장 (금리·대출 담당)'},
+  최센터장:{i:'최', c:'#0C5460', r:'admin', l:'최센터장 (우리금융캐피탈)'},
+};
+
+// ── WON TALK Group chat init messages ──
+const INIT_WT = [
+  {w:'이현수',  t:'좋은 아침입니다! 오늘도 잘 부탁드립니다 😊', ts:'09:10'},
+  {w:'김경화',  t:'네, 안녕하세요! 문의사항 있으시면 말씀해주세요.', ts:'09:11'},
+  {w:'최영호',  t:'어제 접수한 건 처리됐나요?', ts:'09:13'},
+  {w:'이과장',  t:'최영호님, #9821 건 오늘 처리 완료 예정입니다!', ts:'09:14'},
+  {w:'박소연',  t:'저도 신규 대출 건 접수하려고요', ts:'09:15'},
+  {w:'이현수',  t:'비즈폼 쓰면 빠르더라고요 👍', ts:'09:16'},
+  {w:'김경화',  t:'맞아요! 비즈폼 쓰시면 담당자 자동 배정돼서 훨씬 빨라요.', ts:'09:16'},
+];
+
+// ── STATE ──
+const S = {
+  role:'guest', scene:1, uid:9871,
+  readN:0, readIv:null, noticePinned:false, authDone:false,
+  dashMode:false, dashTab:'ag',
+  tasks:[
+    {id:9841, t:'금리 문의 — 이철수', s:'캐스퍼 일렉트릭 · 07.07', st:'pend', mid:null},
+    {id:9803, t:'대출 승인 — 김민준', s:'K8 하이브리드 · 07.06',  st:'done', mid:null},
+  ],
+};
+
+// ── SCRIPTS ──
+// mode: 'kakao' = KakaoTalk 1:1, 'wt' = WON TALK group chat (default)
+const SCRIPTS = {
+  1:{
+    narr:'박대표가 이직 후 WON TALK 채널 접속을 시도합니다. 먼저 기존 방식대로 김경화에게 카카오톡으로 연락합니다.',
+    lines:[
+      {type:'k', // k = kakaoTalk message from 박대표
+       text:'김경화님, 저 박대표인데요. 이직하고 나서 기존 링크로 들어가려 했는데 접속이 안 되네요?',
+       resp:{w:'김경화', mode:'kakao', t:'박대표님! 예전 오픈채팅은 링크만 있으면 누구나 들어왔는데, 지금은 기간계 조직도 연동으로 바뀌었어요. 제가 WON TALK 초대 링크 발송해 드릴게요!'}},
+    ]
+  },
+  2:{
+    narr:'박대표가 채팅방에서 대출 접수를 시도합니다. 먼저 말을 꺼내고, 고객 개인정보를 텍스트로 입력하려 하지만...',
+    lines:[
+      {type:'g', text:'신규 대출 건 접수합니다. 고객 홍길동인데요.'},
+      {type:'w', text:'주민번호 뒷자리 1234567, 아이오닉6 3500만원 건 처리 부탁드립니다'},
+      {type:'g', text:'(비즈폼 클릭) 오, 고객 정보가 자동으로 입력됐네요! 이렇게 하면 되는 거죠?', trig:'open_bf',
+       resp:{w:'김경화', t:'네! 비즈폼으로 들어온 건 개인정보가 시스템 내에서 비식별화 처리돼서 단체방에 절대 원문이 노출 안 돼요. 금감원 감사도 문제없습니다.'}},
+    ]
+  },
+  3:{
+    narr:'비즈폼 제출 즉시 고유 추적 URL이 자동 생성됩니다. 기간계 CRM에도 자동으로 기록됩니다.',
+    lines:[
+      {type:'g', text:'와, 제출하자마자 고유 URL이 생겼어요! 이게 CRM에 자동으로 기록되는 거죠?', trig:'show_url_info'},
+    ]
+  },
+  4:{
+    narr:'비즈폼 접수 즉시 시스템이 담당 BR에게 자동으로 업무를 배정하고 알림톡을 발송합니다.',
+    lines:[
+      {type:'b', text:'박대표님, 방금 보내주신 건 제가 자동 배정받았어요. 바로 처리 시작할게요!',
+       resp:{w:'박대표', t:'오, 빠르네요! 예전엔 방에 올려도 누가 담당인지 몰라서 한참 기다렸는데.'}},
+    ]
+  },
+  5:{
+    narr:'박대표가 "내 대화 보기" 탭 하나로 본인이 신청한 모든 건의 진행 상태와 대화 내역을 직접 확인합니다.',
+    lines:[
+      {type:'g', text:'아까 접수한 #9872 건 어떻게 됐지? (내 대화 보기 탭 클릭)', trig:'open_tasks',
+       resp:{w:'김경화', t:'"어떻게 됐어요?" 문의 안 하셔도 돼요! 탭 하나로 본인 건 상태 바로 확인 가능합니다.'}},
+    ]
+  },
+  6:{
+    narr:'수수료율 같은 민감한 정보는 단체방 노출 없이 특정 파트너에게만 비밀 메시지로 전달합니다.',
+    lines:[
+      {type:'b', text:'(단체방에 수수료율을 노출하면 안 되니, 비밀 메시지를 전송합니다.)', trig:'send_locked_secret'},
+      {type:'g', text:'(🔒 버블 탭 → 잠금 해제) 아, 이렇게 나오는군요! 예전엔 카톡 1:1로 따로 해야 했는데.',
+       resp:{w:'김경화', t:'단체방 효율성은 유지하면서 개별 협상 정보는 완벽히 보호됩니다 😊'}},
+    ]
+  },
+  7:{
+    narr:'센터장이 공지를 등록하면 상단에 고정되고, 4,000명의 읽음 여부를 실시간으로 추적합니다.',
+    lines:[
+      {type:'a', text:'금리 변경 공지 등록합니다. 파트너 4,000명 알림톡 동시 발송이에요.', trig:'pin_notice'},
+    ]
+  },
+  8:{
+    narr:'센터장이 주간 현황 파악을 공지로 안내한 후, 채널 대시보드에서 AG별·BR별 데이터를 직접 조회합니다.',
+    lines:[
+      {type:'a', text:'주간 AG 현황을 파악하겠습니다. 현황 파악 후, 금리 조정될 수 있습니다', trig:'notice_then_dash'},
+    ]
+  },
+};
+
+const TITLES = {
+  1:'🎬 SCENE 1 — "아무나 못 들어옵니다"',
+  2:'🎬 SCENE 2 — "주민번호를 단체방에 치지 마세요"',
+  3:'🎬 SCENE 3 — "3초 만에 추적 코드가 생겼습니다"',
+  4:'🎬 SCENE 4 — "담당자는 기다리지 않아도 됩니다"',
+  5:'🎬 SCENE 5 — "어떻게 됐어요?"는 옛말',
+  6:'🎬 SCENE 6 — "단체방 안에서, 아무도 모르게"',
+  7:'🎬 SCENE 7 — "4,000명 중 3,820명이 읽었습니다"',
+  8:'🎬 SCENE 8 — "이번 달 누가 제일 잘했는지, 데이터로"',
+};
+
+// ── UTILS ──
+function gt(){const n=new Date();return n.getHours()+':'+(n.getMinutes()<10?'0':'')+n.getMinutes()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
+function scrollAll(){setTimeout(()=>{['p-msgs','ws-msgs','kakao-msgs'].forEach(id=>{const e=document.getElementById(id);if(e)e.scrollTop=e.scrollHeight})},60)}
+function showLayer(id){document.querySelectorAll('.player').forEach(l=>l.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function markDone(n){const e=document.getElementById('sb'+n);if(e){e.classList.add('done');e.classList.remove('active');}}
+
+// ── INIT ──
+function initWonTalk(){
+  const pm=document.getElementById('p-msgs'), wm=document.getElementById('ws-msgs');
+  pm.innerHTML='<div class="p-date">2026년 7월 8일</div>';
+  wm.innerHTML='<div class="ws-sys">2026년 7월 8일</div>';
+  INIT_WT.forEach(m=>{
+    const cast=C[m.w];if(!cast)return;
+    const isBR=cast.r==='br';
+    const pd=document.createElement('div');pd.className='pmr';
+    pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="pbbl">${esc(m.t)}</div><div class="pmeta"><span>${m.ts}</span></div></div>`;
+    pm.appendChild(pd);
+    const wd=document.createElement('div');wd.className='ws-mr';
+    wd.innerHTML=`<div class="ws-av" style="background:${cast.c}">${cast.i}</div><div class="ws-mc"><div class="ws-mn">${cast.l}</div><div class="ws-bbl">${esc(m.t)}</div><div class="ws-meta"><span>${m.ts}</span>${isBR?'<span>9읽음</span>':''}</div></div>`;
+    wm.appendChild(wd);
+  });
+  showInvitePanel();
+}
+
+// ── SCENE ──
+function gotoScene(n){
+  S.scene=n;
+  document.querySelectorAll('.sb-i').forEach((e,i)=>{e.classList.toggle('done',i<n-1);e.classList.toggle('active',i===n-1);});
+  document.getElementById('sb-title').textContent=TITLES[n]||'';
+  const sc=SCRIPTS[n];
+  if(sc){
+    document.getElementById('narr-txt').textContent=sc.narr;
+    document.getElementById('narr-bar').style.display='flex';
+  }
+  if(n>1){
+    const sep=TITLES[n];
+    document.getElementById('p-msgs').innerHTML+=`<div class="p-sep">${sep}</div>`;
+    document.getElementById('ws-msgs').innerHTML+=`<div class="ws-sep">${sep}</div>`;
+    scrollAll();
+  }
+  if([1,2,3,5].includes(n))setRole('guest');
+  else if([4,6].includes(n))setRole('br');
+  else if([7,8].includes(n))setRole('admin');
+  renderChips();
+}
+
+// ── ROLE ──
+function setRole(r){
+  S.role=r;
+  const ph={'guest':'박대표로 메시지 입력...','br':'김경화 BR로 메시지 입력...','admin':'최센터장으로 메시지 입력...'};
+  document.getElementById('main-inp').placeholder=ph[r];
+  ['guest','br','admin'].forEach(x=>document.getElementById('rb-'+x[0]).classList.toggle('on',r===x));
+  document.getElementById('fc-bf').style.display=r==='guest'?'':'none';
+  document.getElementById('fc-not').style.display=r==='admin'?'':'none';
+  document.getElementById('ws-role-badge').textContent=r==='admin'?'우리금융캐피탈 센터장':'우리금융캐피탈 BR';
+  renderChips();
+}
+
+// ── CHIPS ──
+function renderChips(){
+  const row=document.getElementById('chips-row');
+  const sc=SCRIPTS[S.scene];if(!sc){row.innerHTML='<span class="chip-lbl">💬</span>';return;}
+  const rmap={'guest':'g','br':'b','admin':'a'};
+  const cur=rmap[S.role];
+  const lines=sc.lines.filter(c=>c.type===cur||c.type==='k'||c.type==='w');
+  row.innerHTML='<span class="chip-lbl">💬 대사:</span>';
+  if(!lines.length){
+    const others=new Set(sc.lines.map(c=>c.type));
+    const names={g:'[📱 박대표]',b:'[🖥 김경화 BR]',a:'[👔 최센터장]',k:'[📱 박대표]',w:'[📱 박대표]'};
+    const need=[...others].filter(t=>t!==cur).map(t=>names[t]).join(', ');
+    row.innerHTML+=`<span style="font-size:11px;color:var(--muted);font-style:italic">이 장면은 ${need||'다른 역할'}의 차례입니다</span>`;
+    return;
+  }
+  lines.forEach(chip=>{
+    const btn=document.createElement('button');
+    const cls=chip.type==='k'?'chip k':chip.type==='w'?'chip w':chip.type==='b'?'chip b':chip.type==='a'?'chip a':'chip g';
+    btn.className=cls;
+    if(chip.type==='k')btn.title='📱 카카오톡으로 전송됩니다';
+    const short=chip.text.length>46?chip.text.slice(0,45)+'…':chip.text;
+    btn.textContent=(chip.type==='k'?'💬 ':'')+short;
+    btn.title=chip.text;
+    btn.onclick=()=>handleChip(chip,btn);
+    row.appendChild(btn);
+  });
+  showNextBtn(false);
+}
+
+function showNextBtn(show){
+  document.getElementById('next-btn-el')?.remove();
+  if(!show||S.scene>=8)return;
+  const btn=document.createElement('button');
+  btn.id='next-btn-el';btn.className='next-btn';
+  btn.textContent=`✓ SCENE ${S.scene+1}으로 →`;
+  btn.onclick=()=>{markDone(S.scene);gotoScene(S.scene+1);};
+  document.getElementById('chips-row').appendChild(btn);
+}
+
+function handleChip(chip,btn){
+  if(btn)btn.disabled=true;
+  
+  if(chip.type==='w'){
+    // Personal info warning demo
+    addKakaoMsg(chip.text.replace(' → [차단됨] 팝업 확인',''),'박대표');
+    setTimeout(()=>showWarn(),300);
+    return;
+  }
+  
+  if(chip.type==='k'){
+    // KakaoTalk message - goes to kakao view only, NOT WON TALK
+    addKakaoMsg(chip.text,'박대표');
+    // Workspace: show kakao notification
+    showKakaoNotif(chip.text);
+  } else if(chip.type==='g'){
+    addGuestMsg(chip.text);
+  } else if(chip.type==='b'){
+    addBRMsg(C['김경화'],chip.text);
+  } else if(chip.type==='a'){
+    addOtherMsg(chip.text,'최센터장',C['최센터장']);
+  }
+  
+  if(chip.trig)setTimeout(()=>execTrig(chip.trig),350);
+  
+  if(chip.resp){
+    const delay=chip.type==='k'?1200:950;
+    if(chip.resp.mode==='kakao'){
+      // BR responds via KakaoTalk
+      showKakaoTyping(delay,()=>{
+        addKakaoMsg(chip.resp.t,chip.resp.w);
+        // After kakao exchange, show invite button active
+        if(S.scene===1)setTimeout(()=>activateInviteBtn(),600);
+        checkLastChip(chip,sc_lines());
+      });
+    } else {
+      showWsTyping(chip.resp.w,delay,()=>{
+        const cast=C[chip.resp.w];
+        if(cast?.r==='br')addBRMsg(cast,chip.resp.t);
+        else addGuestMsg(chip.resp.t);
+        checkLastChip(chip,sc_lines());
+      });
+    }
+  } else {
+    checkLastChip(chip,sc_lines());
+  }
+}
+function sc_lines(){const sc=SCRIPTS[S.scene];if(!sc)return[];const rm={'guest':'g','br':'b','admin':'a'};const cur=rm[S.role];return sc.lines.filter(c=>c.type===cur||c.type==='k'||c.type==='w');}
+function checkLastChip(chip,lines){
+  if(chip===lines[lines.length-1])setTimeout(()=>showNextBtn(true),chip.resp?700:400);
+}
+
+function execTrig(t){
+  if(t==='open_bf')openBf();
+  else if(t==='show_url_info'){showUrlPanel();markDone(3);setTimeout(()=>showNextBtn(true),300);}
+  else if(t==='open_tasks')openTasks();
+  else if(t==='send_locked_secret')sendLockedSecret();
+  else if(t==='pin_notice')pinNotice();
+  else if(t==='show_dash')toggleDash();
+  else if(t==='notice_then_dash'){
+    // 공지 등록 후 대시보드 오픈
+    const noticeText='[필독] 주간 AG 현황을 파악하겠습니다. 현황 파악 후, 금리 조정될 수 있습니다';
+    S.noticePinned=true;
+    document.getElementById('p-notice-txt').textContent=noticeText;
+    document.getElementById('p-notice').classList.add('show');
+    document.getElementById('ws-nbar-txt').textContent=noticeText;
+    document.getElementById('ws-nbar').classList.add('show');
+    addSys('⚙ 공지 등록 완료 — 파트너 4,000명 알림톡 발송 중',true);
+    markDone(7);markDone(8);
+    setTimeout(()=>{toggleDash();},900);
+  }
+}
+
+// ── KAKAO MESSAGES ──
+function addKakaoMsg(text,who){
+  const t=gt();
+  const isSelf=who==='박대표';
+  const cast=C[who]||{i:who[0],c:'#5B3FE4'};
+  const el=document.getElementById('kakao-msgs');
+  const d=document.createElement('div');d.className='kmr'+(isSelf?' s':'');
+  if(isSelf){
+    d.innerHTML=`<div class="kcol" style="align-items:flex-end"><div class="kbbl">${esc(text)}</div><div class="k-meta" style="justify-content:flex-end"><span>${t}</span></div></div>`;
+  }else{
+    d.innerHTML=`<div class="kavt" style="background:${cast.c}">${cast.i}</div><div class="kcol"><div class="k-sender">${who}</div><div class="kbbl">${esc(text)}</div><div class="k-meta"><span>${t}</span></div></div>`;
+  }
+  d.style.animation='fadeUp .2s ease';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+
+function showKakaoTyping(delay,cb){
+  const el=document.getElementById('kakao-msgs');
+  const tid='kt'+Date.now();
+  const d=document.createElement('div');d.className='kmr';d.id=tid;
+  d.innerHTML=`<div class="kavt" style="background:#2C3E50">김</div><div class="kcol"><div class="k-typing"><span></span><span></span><span></span></div></div>`;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+  setTimeout(()=>{document.getElementById(tid)?.remove();cb();},delay);
+}
+
+// Kakao notification in workspace (NOT in ws-msgs chat)
+function showKakaoNotif(text){
+  const panel=document.getElementById('dynamic-panel');
+  const d=document.createElement('div');
+  d.className='ws-kakao-notif';
+  d.style.marginTop='6px';
+  d.innerHTML=`<div class="ws-kakao-notif-t">💬 카카오톡 수신 <span style="font-size:9px;font-weight:400;color:#666">— ${gt()}</span></div><div class="ws-kakao-notif-body"><b>박대표</b> (에이원오토)<br>"${text.slice(0,50)}${text.length>50?'…':''}"</div>`;
+  panel.appendChild(d);
+}
+
+function activateInviteBtn(){
+  // Highlight the invite button after kakao exchange
+  const btn=document.querySelector('#inv-btn-박대표');
+  if(btn&&!btn.disabled){
+    btn.style.animation='pulse 1.5s ease infinite';
+    btn.style.boxShadow='0 0 0 0 rgba(91,63,228,.4)';
+  }
+}
+
+// ── WON TALK MESSAGES ──
+function addGuestMsg(text,type='text',extra={}){
+  const t=gt();
+  const cast=C['박대표'];
+  // Phone (self - right, yellow)
+  const pm=document.getElementById('p-msgs');
+  const pd=document.createElement('div');pd.className='pmr s';
+  if(type==='bizform'){
+    const mid='bfm-'+Date.now();
+    S.tasks[0].mid=mid;
+    pd.innerHTML=`<div class="pcol"><div class="pbbl p-bfm" id="${mid}"><div class="p-bfm-t">📋 ${extra.title}</div>${Object.entries(extra.fields||{}).map(([k,v])=>`<div class="p-bfm-r"><span class="p-bfm-l">${k}</span><span>${esc(v)}</span></div>`).join('')}</div><div class="pmeta"><span>${t}</span></div></div>`;
+  }else{
+    pd.innerHTML=`<div class="pcol"><div class="pbbl">${esc(text)}</div><div class="pmeta"><span>${t}</span></div></div>`;
+  }
+  pm.appendChild(pd);
+  // Workspace (partner - left)
+  const wm=document.getElementById('ws-msgs');
+  const wd=document.createElement('div');wd.className='ws-mr';
+  if(type==='bizform'){
+    wd.innerHTML=`<div class="ws-av" style="background:${cast.c}">${cast.i}</div><div class="ws-mc"><div class="ws-mn">${cast.l}</div><div class="ws-bbl"><b>📋 ${extra.title}</b><div class="ws-bfm-g">${Object.entries(extra.fields||{}).map(([k,v])=>`<div class="ws-bff"><label>${k}</label><span>${esc(v)}</span></div>`).join('')}</div></div><div class="ws-meta"><span>${t}</span><span>1읽음</span></div></div>`;
+  }else{
+    wd.innerHTML=`<div class="ws-av" style="background:${cast.c}">${cast.i}</div><div class="ws-mc"><div class="ws-mn">${cast.l}</div><div class="ws-bbl">${esc(text)}</div><div class="ws-meta"><span>${t}</span><span>1읽음</span></div></div>`;
+  }
+  wm.appendChild(wd);
+  const b=document.getElementById('ws-badge');if(b)b.textContent=parseInt(b.textContent||0)+1;
+  scrollAll();
+}
+
+function addBRMsg(cast,text){
+  const t=gt();
+  const pd=document.createElement('div');pd.className='pmr';
+  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="pbbl">${esc(text)}</div><div class="pmeta"><span>${t}</span></div></div>`;
+  document.getElementById('p-msgs').appendChild(pd);
+  const wd=document.createElement('div');wd.className='ws-mr s';
+  wd.innerHTML=`<div class="ws-mc"><div class="ws-bbl" style="background:#F0EBFF;border-color:#DDD5FF;border-radius:12px 3px 12px 12px">${esc(text)}</div><div class="ws-meta" style="justify-content:flex-end"><span>${t}</span></div></div><div class="ws-av" style="background:${cast.c}">${cast.i}</div>`;
+  document.getElementById('ws-msgs').appendChild(wd);
+  scrollAll();
+}
+
+function addOtherMsg(text,who,cast){
+  const t=gt();
+  const pd=document.createElement('div');pd.className='pmr';
+  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="pbbl">${esc(text)}</div><div class="pmeta"><span>${t}</span></div></div>`;
+  document.getElementById('p-msgs').appendChild(pd);
+  const wd=document.createElement('div');wd.className='ws-mr';
+  wd.innerHTML=`<div class="ws-av" style="background:${cast.c}">${cast.i}</div><div class="ws-mc"><div class="ws-mn">${cast.l}</div><div class="ws-bbl">${esc(text)}</div><div class="ws-meta"><span>${t}</span></div></div>`;
+  document.getElementById('ws-msgs').appendChild(wd);
+  scrollAll();
+}
+
+// System msg (no person)
+function addSys(text,hi=false){
+  const cls=hi?'p-sys hi':'p-sys';
+  const wcls=hi?'ws-sys hi':'ws-sys';
+  document.getElementById('p-msgs').innerHTML+=`<div class="${cls}">${text}</div>`;
+  document.getElementById('ws-msgs').innerHTML+=`<div class="${wcls}">${text}</div>`;
+  scrollAll();
+}
+
+function showWsTyping(who,delay,cb){
+  const cast=C[who];if(!cast)return setTimeout(cb,delay);
+  const tid='wt'+Date.now();
+  const isBR=cast.r==='br';
+  const wd=document.createElement('div');wd.className='ws-tr';wd.id='ww'+tid;
+  wd.innerHTML=isBR
+    ?`<div class="ws-mc"><div class="ws-dots"><span></span><span></span><span></span></div></div><div class="ws-av" style="background:${cast.c}">${cast.i}</div>`
+    :`<div class="ws-av" style="background:${cast.c}">${cast.i}</div><div class="ws-mc"><div class="ws-dots"><span></span><span></span><span></span></div></div>`;
+  document.getElementById('ws-msgs').appendChild(wd);
+  // Phone typing
+  const pd=document.createElement('div');pd.className='p-tr';pd.id='pw'+tid;
+  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="p-dots"><span></span><span></span><span></span></div>`;
+  document.getElementById('p-msgs').appendChild(pd);
+  scrollAll();
+  setTimeout(()=>{
+    document.getElementById('ww'+tid)?.remove();
+    document.getElementById('pw'+tid)?.remove();
+    cb();
+  },delay);
+}
+
+function sendFree(){
+  const inp=document.getElementById('main-inp');
+  const text=inp.value.trim();if(!text)return;inp.value='';
+  if(S.role==='guest'){
+    if(/주민번호|뒷자리|\d{6}[-\s]\d{7}/.test(text)){addGuestMsg(text);setTimeout(()=>showWarn(),250);return;}
+    if(S.scene===1){addKakaoMsg(text,'박대표');return;}
+    addGuestMsg(text);
+  }else if(S.role==='br')addBRMsg(C['김경화'],text);
+  else addOtherMsg(text,'최센터장',C['최센터장']);
+}
+function sendWs(){
+  const inp=document.getElementById('ws-inp-f');
+  const t=inp.value.trim();if(!t)return;inp.value='';
+  addBRMsg(C['김경화'],t);
+}
+
+// ── INVITE PANEL ──
+function showInvitePanel(){
+  const partners=[
+    {w:'박대표', sub:'에이원오토 · 신규 이직', btn:true},
+    {w:'이현수', sub:'에이원오토 · 참여중', btn:false},
+    {w:'최영호', sub:'에이원오토 · 참여중', btn:false},
+    {w:'박소연', sub:'에이원오토 · 참여중', btn:false},
+  ];
+  document.getElementById('dynamic-panel').innerHTML=`
+    <div class="rp-title" style="margin-top:5px">파트너 초대 관리</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:6px">기간계 조직도 연동 파트너 목록</div>
+    ${partners.map(p=>{
+      const cast=C[p.w]||{i:'?',c:'#999'};
+      return `<div class="inv-item"><div class="inv-avt" style="background:${cast.c}">${cast.i}</div><div class="inv-info"><div class="inv-name">${p.w}</div><div class="inv-sub">${p.sub}</div></div>${p.btn?`<button class="inv-btn" id="inv-btn-${p.w.replace(' ','')}" onclick="sendInvite('${p.w}')">초대 보내기</button>`:`<span class="inv-done">✅ 참여중</span>`}</div>`;
+    }).join('')}`;
+}
+
+function sendInvite(who){
+  const btnEl=document.getElementById('inv-btn-'+who.replace(' ',''));
+  if(btnEl){btnEl.textContent='초대 발송 완료 ✓';btnEl.disabled=true;btnEl.style.background='var(--acc)';btnEl.style.animation='';}
+  // Phone → 알림톡 수신 화면
+  showLayer('pl-alimtalk');
+  // Update right panel
+  const notif=document.createElement('div');
+  notif.style.cssText='margin-top:6px;background:#FAE100;border-radius:8px;padding:9px;animation:fadeUp .3s ease';
+  notif.innerHTML=`<div style="font-size:9px;font-weight:700;color:#3C1E1E;margin-bottom:3px">📱 알림톡 발송 완료</div><div style="font-size:10px;color:#3C1E1E">${who}님 휴대폰으로 초대 링크 발송<br>인증 대기 중...</div>`;
+  document.getElementById('dynamic-panel').appendChild(notif);
+}
+
+// ── AUTH ──
+function doAuth(){
+  document.getElementById('auth-form').classList.add('hide');
+  document.getElementById('auth-done').classList.remove('hide');
+  S.authDone=true;
+  setTimeout(()=>{
+    // Transition to WON TALK group chat
+    showLayer('pl-chat');
+    addSys('⚙ 박대표님이 에이원오토 채널에 입장하셨습니다',true);
+    setTimeout(()=>{
+      addBRMsg(C['김경화'],'박대표님, WON TALK 에이원오토 영업팀 채널 입장을 환영합니다! 🎉 문의사항은 언제든지 말씀해 주세요.');
+      markDone(1);
+      setTimeout(()=>gotoScene(2),1000);
+    },800);
+  },1200);
+}
+
+// ── WARN ──
+function showWarn(){document.getElementById('warn-ov').style.display='block';document.getElementById('warn-toast').style.display='block';}
+function closeWarn(){document.getElementById('warn-ov').style.display='none';document.getElementById('warn-toast').style.display='none';}
+
+// ── BIZFORM ──
+function openBf(){if(!S.authDone)return;showLayer('pl-bf');}
+function submitBf(){
+  const name=document.getElementById('bf-name').value||'홍길동';
+  const prod=document.getElementById('bf-prod').value;
+  const car=document.getElementById('bf-car').value||'현대 아이오닉6';
+  const amt=document.getElementById('bf-amt').value||'3,500만원';
+  const tel=document.getElementById('bf-tel').value;
+  S.uid++;const uid=S.uid;
+  const fields={'고객명':name,'상품':prod,'차량':car,'금액':amt};
+  if(tel)fields['연락처']=tel;
+  S.tasks.unshift({id:uid,t:`대출 승인 신청 — ${name}`,s:`${car} · ${gt()}`,st:'prog',mid:null});
+  addGuestMsg('','bizform',{title:'대출 승인 신청',fields});
+  showLayer('pl-chat');
+  document.getElementById('bf-tel').value='';
+  markDone(2);
+  setTimeout(()=>{
+    // URL card in phone
+    document.getElementById('p-msgs').innerHTML+=`<div class="p-url-card"><div class="p-url-t">⚙ 접수 완료 · 고유 추적 URL 발급</div><div style="font-size:10px;color:#555;margin-bottom:2px">${name} · ${prod}</div><span class="p-url-chip">wontalk.woorifcapital.com/msg/${uid}</span><div style="font-size:9px;color:var(--acc);margin-top:3px">CRM 자동 기록 완료</div></div>`;
+    // URL card in workspace
+    document.getElementById('ws-msgs').innerHTML+=`<div class="ws-url-card"><div class="ws-url-t">⚙ 접수 완료 · 고유 추적 URL 자동 생성</div><div style="font-size:11px;color:#555;margin-bottom:3px">${name} · ${car} · ${prod}</div><span class="ws-url-chip">wontalk.woorifcapital.com/msg/${uid}</span><div style="font-size:10px;color:var(--acc);margin-top:3px">CRM 자동 기록 완료 · 담당자 배정 중...</div></div>`;
+    scrollAll();markDone(3);
+    // Auto assign
+    setTimeout(()=>{
+      document.getElementById('ws-msgs').innerHTML+=`<div class="ws-assign">⚙ <b>업무 자동 배정 완료</b><br>담당자: 김경화 (금리·대출 담당) · #${uid} · 처리기한: 오늘 18:00</div>`;
+      showAlimtalk(`새 업무 배정: 대출 승인 신청 #${uid}\n∙ 고객: ${name}\n∙ 접수자: 박대표 (에이원오토)\n∙ 처리기한: 오늘 18:00`);
+      updateRight('assign',{name,car,prod,uid});
+      scrollAll();markDone(4);gotoScene(5);
+    },1200);
+  },600);
+}
+
+// ── RIGHT PANEL ──
+function updateRight(type,data={}){
+  const p=document.getElementById('dynamic-panel');
+  if(type==='assign'){
+    p.innerHTML=`<div class="rp-title" style="margin-top:5px">배정된 할일</div>
+    <div class="rcard" style="border-left:3px solid var(--p)">
+      <div class="rc-hd"><div class="rc-t">대출 승인 신청 #${data.uid}</div><span class="sbdg sw">대기</span></div>
+      <div class="rc-m">${data.name} · ${data.car}<br>마감: 오늘 18:00</div>
+    </div>
+    <div class="crm-box"><div class="crm-t">⚙ URL 자동 추적</div>
+      <div class="crm-r"><div class="crm-l">고유 ID</div><div class="crm-v">msg/${data.uid}</div></div>
+      <div class="crm-r"><div class="crm-l">생성</div><div class="crm-v n">${gt()} · CRM 자동기록</div></div>
+    </div>`;
+  }else if(type==='read'){
+    p.innerHTML=`<div class="rp-title" style="margin-top:5px">공지 읽음 현황</div>
+    <div class="nr-card">
+      <div class="nr-hd"><div><div class="nr-num" id="dp-num">0</div><div class="nr-tot">/ 4,000명</div></div><div style="font-size:10px;color:var(--muted)">실시간</div></div>
+      <div class="prog"><div class="progf" id="dp-prog" style="width:0%"></div></div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">알림톡 발송 후 집계 중...</div>
+      <button class="resend" onclick="alert('미열람 180명에게 재알림 발송!')">⚡ 미열람자 재알림 발송</button>
+    </div>`;
+    startReadCnt();
+  }
+}
+
+// ── 내 대화 보기 ──
+function openTasks(){if(!S.authDone)return;renderTasks();showLayer('pl-tasks');setTimeout(()=>{const el=document.getElementById('ts-list');if(el)el.scrollTop=0;},50);}
+function renderTasks(f=null){
+  const labels={pend:'🟡 대기중',prog:'🔵 처리중',done:'✅ 완료'};
+  const previews={
+    pend:'"확인 후 연락드리겠습니다"',
+    prog:'"담당자가 처리 중입니다. 잠시만 기다려주세요."',
+    done:'"처리 완료되었습니다. 확인 부탁드립니다."'
+  };
+  const el=document.getElementById('ts-list');
+  const items=f?S.tasks.filter(t=>t.st===f):S.tasks;
+  el.innerHTML=items.map(t=>`
+    <div class="tc ${t.st}" onclick="jumpToMsg('${t.mid||''}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+        <div style="flex:1;min-width:0">
+          <div class="tc-t">${t.t}</div>
+          <div class="tc-s">${t.s}</div>
+          <div style="font-size:10px;color:#888;font-style:italic;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${previews[t.st]}</div>
+        </div>
+        <div style="flex-shrink:0;text-align:right">
+          <div class="tc-b">${labels[t.st]}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:3px">탭하여 보기 →</div>
+        </div>
+      </div>
+    </div>`).join('');
+  if(!el.innerHTML)el.innerHTML='<div style="text-align:center;padding:14px;font-size:11px;color:var(--muted)">대화 내역이 없습니다</div>';
+}
+function filterTf(el,f){document.querySelectorAll('.tf').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderTasks(f==='all'?null:f)}
+function jumpToMsg(id){showLayer('pl-chat');if(!id)return;setTimeout(()=>{const el=document.getElementById(id);if(el){el.style.background='#FFD700';el.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>{el.style.background='';},1500);}},300);}
+
+// ── SECRET ──
+function sendLockedSecret(){
+  const t=gt(),cast=C['김경화'];
+  const secId='sec-'+Date.now();
+  const pd=document.createElement('div');pd.className='pmr';
+  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="p-locked" id="${secId}" onclick="revealSecret('${secId}')"><span class="lock-ico">🔒</span><b>비밀 메시지가 도착했습니다</b><div class="lock-hint">탭하여 확인하세요</div></div><div class="pmeta"><span>${t}</span></div></div>`;
+  document.getElementById('p-msgs').appendChild(pd);
+  const wd=document.createElement('div');wd.className='ws-mr s';
+  wd.innerHTML=`<div class="ws-mc"><div class="ws-sec-bbl">🔒 <b>비밀 메시지 전송 완료</b><br>박대표님, 이번 분기 우대 수수료율 <b>[2.15%]</b> 특별 적용 안내드립니다.<br><span style="font-size:10px;color:#888">타 AG사에는 비공개</span></div><div class="ws-meta" style="justify-content:flex-end"><span>${t}</span></div></div><div class="ws-av" style="background:${cast.c}">${cast.i}</div>`;
+  document.getElementById('ws-msgs').appendChild(wd);
+  addSys('⚙ 다른 참여자에게는: "🔒 비밀 메시지 — 특정 참여자에게만 전달된 메시지입니다"');
+  scrollAll();
+}
+function revealSecret(id){
+  const el=document.getElementById(id);if(!el||el.classList.contains('revealed'))return;
+  el.classList.add('revealed');
+  el.innerHTML=`<span style="font-size:11px">🔓 <b style="color:#C2185B">비밀 메시지 확인</b></span><br>박대표님, 이번 분기 우대 수수료율 <b style="color:#C2185B;font-size:13px">[2.15%]</b> 특별 적용 안내드립니다.<br><span style="font-size:10px;color:#888">타 AG사에는 비공개입니다.</span>`;
+}
+function openSecret(){
+  document.getElementById('sec-to').innerHTML=S.role==='br'?'수신자: <b>박대표 (에이원오토 · 단체방 내 전용)</b>':'수신자: <b>김경화 (우리금융캐피탈 WON TALK)</b>';
+  showLayer('pl-secret');
+}
+function sendSecret(){
+  const text=document.getElementById('sec-inp').value.trim();if(!text)return;
+  document.getElementById('sec-inp').value='';
+  if(S.role==='br')sendLockedSecret();
+  else{addGuestMsg(text);addSys('⚙ 비밀 메시지 전송 완료');}
+  showLayer('pl-chat');
+}
+
+// ── NOTICE ──
+function pinNotice(){
+  const text=prompt('공지 내용:','[필독] 7월 자동차금융 기준금리 변경 안내 (2.3% → 2.15%)');
+  if(!text)return;
+  S.noticePinned=true;
+  document.getElementById('p-notice-txt').textContent=text;
+  document.getElementById('p-notice').classList.add('show');
+  document.getElementById('ws-nbar-txt').textContent=text;
+  document.getElementById('ws-nbar').classList.add('show');
+  document.getElementById('ws-read-cnt').textContent='집계 중...';
+  addSys('⚙ 공지 등록 완료 — 파트너 4,000명 알림톡 발송 중',true);
+  updateRight('read');markDone(7);setTimeout(()=>showNextBtn(true),2500);
+}
+function showReadPanel(){if(S.noticePinned)updateRight('read')}
+function startReadCnt(){
+  S.readN=0;if(S.readIv)clearInterval(S.readIv);
+  const tgt=3820;
+  S.readIv=setInterval(()=>{
+    S.readN=Math.min(S.readN+Math.floor(Math.random()*150+60),tgt);
+    document.getElementById('ws-read-cnt').textContent=`${S.readN.toLocaleString()} / 4,000 읽음`;
+    const n=document.getElementById('dp-num'),pr=document.getElementById('dp-prog');
+    if(n)n.textContent=S.readN.toLocaleString();
+    if(pr)pr.style.width=(S.readN/4000*100).toFixed(1)+'%';
+    if(S.readN>=tgt)clearInterval(S.readIv);
+  },280);
+}
+
+// ── URL PANEL ──
+function showUrlPanel(){
+  const total=1247+S.tasks.filter(t=>t.st==='prog').length;
+  document.getElementById('dynamic-panel').innerHTML=`
+    <div class="rp-title" style="margin-top:5px">CRM 업무 추적</div>
+    <div class="crm-box"><div class="crm-t">⚙ 이번 달 자동 집계</div>
+      <div class="crm-r"><div class="crm-l">총 인입</div><div class="crm-v n"><b>${total.toLocaleString()}건</b> (오차 0건)</div></div>
+      <div class="crm-r"><div class="crm-l">처리 완료</div><div class="crm-v n">1,089건 (87.3%)</div></div>
+      ${S.uid>9871?`<div class="crm-r"><div class="crm-l">최근 URL</div><div class="crm-v">msg/${S.uid}</div></div>`:''}
+    </div>`;
+}
+
+// ── ALIMTALK ──
+function showAlimtalk(body){
+  document.getElementById('alim-body').innerHTML=body.replace(/\n/g,'<br>');
+  const el=document.getElementById('alim');el.style.display='block';
+  setTimeout(()=>{if(el.style.display==='block')el.style.display='none';},6000);
+}
+
+// ── DASHBOARD ──
+const AG_D=[
+  {n:'에이원오토',cnt:147,pct:90,c:'#5B3FE4',rate:'91.2%',spd:'1h 23m',ptrs:['박대표 23건','이현수 18건','최영호 15건','박소연 12건','기타 79건']},
+  {n:'현대모터스', cnt:89, pct:61,c:'#7B5FFF',rate:'88.5%',spd:'1h 47m',ptrs:['이팀장 31건','최소장 28건','기타 30건']},
+  {n:'기아오토',   cnt:61, pct:42,c:'#9B7FFF',rate:'85.2%',spd:'2h 01m',ptrs:['김매니저 25건','박딜러 20건','기타 16건']},
+  {n:'삼성오토',   cnt:48, pct:33,c:'#B8A0FF',rate:'90.1%',spd:'1h 15m',ptrs:['최영업 22건','이대표 16건','기타 10건']},
+  {n:'센트럴오토', cnt:37, pct:25,c:'#CEC0FF',rate:'83.7%',spd:'2h 18m',ptrs:['한매니저 20건','기타 17건']},
+];
+const BR_D=[
+  {n:'김경화',cnt:189,pct:85,c:'#5B3FE4',role:'금리·대출 담당',ag:271,spd:'1h 12m',ch:['에이원오토 영업팀','현대모터스 강남점']},
+  {n:'이과장', cnt:174,pct:78,c:'#7B5FFF',role:'금리·대출 담당',ag:265,spd:'1h 28m',ch:['기아오토 판교점','삼성오토 신촌점']},
+  {n:'박팀장', cnt:162,pct:73,c:'#9B7FFF',role:'금리·대출 담당',ag:258,spd:'1h 45m',ch:['센트럴오토 강동점']},
+  {n:'정담당', cnt:28, pct:13,c:'#E74C3C',role:'금리·대출 담당',ag:89, spd:'⚠ 14h 초과',ch:[],warn:true},
+];
+
+function toggleDash(){
+  S.dashMode=!S.dashMode;
+  const chatView=document.getElementById('chat-view');
+  const dashView=document.getElementById('dash-view');
+  const dashMenu=document.getElementById('ws-dash-menu');
+  // 채팅방 .on 클래스 관리
+  const firstRoom=document.querySelector('.ws-rooms .ws-rm');
+  if(chatView)chatView.style.display=S.dashMode?'none':'flex';
+  if(dashView)dashView.style.display=S.dashMode?'flex':'none';
+  if(dashMenu)dashMenu.classList.toggle('on',S.dashMode);
+  if(firstRoom){firstRoom.classList.toggle('on',!S.dashMode);}
+  if(S.dashMode){showDashTab('ag');markDone(8);}
+}
+function showDashTab(tab){
+  S.dashTab=tab;
+  document.getElementById('tab-ag').classList.toggle('on',tab==='ag');
+  document.getElementById('tab-br').classList.toggle('on',tab==='br');
+  const dc=document.getElementById('dash-content');
+  const total=(1247+S.tasks.filter(t=>t.st==='prog').length).toLocaleString();
+  if(tab==='ag'){
+    dc.innerHTML=`<div class="dash-sum"><div class="dash-sum-c"><div class="dash-sum-v">${total}</div><div class="dash-sum-l">이번 달 총 신청</div></div><div class="dash-sum-c"><div class="dash-sum-v">${AG_D.reduce((a,d)=>a+d.cnt,0)}</div><div class="dash-sum-l">이번 주 신청</div></div><div class="dash-sum-c"><div class="dash-sum-v">5개</div><div class="dash-sum-l">활성 AG사</div></div></div>
+    <div class="dash-sec-t">AG사별 신청 건수 — 클릭하면 상세 보기</div>
+    ${AG_D.map(d=>`<div class="dash-row" onclick="showAGDetail('${d.n}')"><div class="dash-row-name">${d.n}</div><div class="dash-bw"><div class="dash-bar" style="width:${d.pct}%;background:${d.c}">${d.cnt}건</div></div><div class="dash-cnt">${d.cnt}</div><span class="dash-badge ok-badge">${d.rate}</span></div>`).join('')}`;
+  }else{
+    dc.innerHTML=`<div class="dash-sum"><div class="dash-sum-c"><div class="dash-sum-v">15명</div><div class="dash-sum-l">총 BR 직원</div></div><div class="dash-sum-c"><div class="dash-sum-v">266명</div><div class="dash-sum-l">1인당 담당 AG</div></div><div class="dash-sum-c"><div class="dash-sum-v">2:41</div><div class="dash-sum-l">평균 처리시간</div></div></div>
+    <div class="dash-sec-t">BR 직원별 처리 현황 — 클릭하면 상세 보기</div>
+    ${BR_D.map(d=>`<div class="dash-row" onclick="showBRDetail('${d.n}')"><div class="dash-row-name">${d.n}</div><div class="dash-bw"><div class="dash-bar" style="width:${d.pct}%;background:${d.c}">${d.cnt}건</div></div><div class="dash-cnt">${d.cnt}</div><span class="dash-badge ${d.warn?'warn-badge':'ok-badge'}">${d.warn?'⚠지연':d.spd}</span></div>`).join('')}`;
+  }
+}
+function showAGDetail(n){
+  const d=AG_D.find(a=>a.n===n);if(!d)return;
+  document.getElementById('ws-right').innerHTML=`<div class="rp-title">${n} 상세</div><div class="detail-card"><div class="detail-title">${n}</div><div class="detail-stat"><span class="detail-lbl">이번 주 신청</span><span class="detail-val">${d.cnt}건</span></div><div class="detail-stat"><span class="detail-lbl">처리율</span><span class="detail-val">${d.rate}</span></div><div class="detail-stat"><span class="detail-lbl">평균 응대</span><span class="detail-val">${d.spd}</span></div><div style="margin-top:9px"><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px">파트너별 신청</div>${d.ptrs.map(p=>`<div class="detail-li"><span>${p}</span></div>`).join('')}</div></div><div style="font-size:10px;padding:8px;background:#F8F5FF;border-radius:8px;border:1px solid #EDE9FF;color:var(--muted);line-height:1.6;margin-top:4px">이 데이터를 기반으로 파트너 인센티브 정책을 수립하세요.</div>`;
+}
+function showBRDetail(n){
+  const d=BR_D.find(b=>b.n===n);if(!d)return;
+  document.getElementById('ws-right').innerHTML=`<div class="rp-title">${n} 상세</div><div class="detail-card"><div class="detail-title" style="${d.warn?'color:var(--danger)':''}">${n} ${d.warn?'⚠':'✅'}</div><div class="detail-stat"><span class="detail-lbl">이번 주 처리</span><span class="detail-val">${d.cnt}건</span></div><div class="detail-stat"><span class="detail-lbl">담당 AG</span><span class="detail-val">${d.ag}명</span></div><div class="detail-stat"><span class="detail-lbl">응대속도</span><span class="detail-val">${d.spd}</span></div>${d.ch.length?`<div style="margin-top:9px"><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px">담당 채널</div>${d.ch.map(c=>`<div class="detail-li"><span>${c}</span></div>`).join('')}</div>`:''}${d.warn?`<div style="margin-top:8px;padding:8px;background:#FFF3CD;border-radius:8px;font-size:11px;color:#856404">⚠ 응대 지연 14시간 초과 — 즉시 확인 필요</div>`:''}</div>`;
+}
+
+// ── INIT ──
+initWonTalk();
+gotoScene(1);
+setRole('guest');
+</script>
+</body>
+</html>
