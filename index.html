@@ -15,17 +15,15 @@ html,body{height:100%;overflow:hidden}
 body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
 /* ── SCENE BAR ── */
-.scene-bar{flex-shrink:0;background:var(--sidebar);padding:5px 18px;display:flex;align-items:center;gap:0;overflow-x:auto}
-.sb-i{display:flex;align-items:center;gap:4px;cursor:pointer;padding:0 7px 0 0;white-space:nowrap}
-.sb-i::after{content:'›';color:rgba(255,255,255,.15);font-size:12px;margin-left:5px}
-.sb-i:last-child::after{display:none}
-.sb-d{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.15);color:rgba(255,255,255,.2);font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
-.sb-l{font-size:10px;color:rgba(255,255,255,.22);font-weight:600;transition:.2s}
-.sb-i.done .sb-d{background:var(--acc);border-color:var(--acc);color:#fff}
-.sb-i.done .sb-l{color:rgba(255,255,255,.4)}
-.sb-i.active .sb-d{background:var(--p);border-color:var(--p);color:#fff;box-shadow:0 0 8px rgba(91,63,228,.5)}
-.sb-i.active .sb-l{color:#fff}
-.sb-title{font-size:11px;color:rgba(255,255,255,.38);margin-left:auto;padding-left:12px;border-left:1px solid rgba(255,255,255,.1);white-space:nowrap;flex-shrink:0}
+.scene-bar{flex-shrink:0;background:#fff;border-bottom:2px solid #E5E7EB;padding:10px 24px;display:flex;justify-content:center;align-items:center;gap:4px}
+.sb-i{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:0 10px;white-space:nowrap}
+.sb-i::after{content:'';display:none}
+.sb-d{width:36px;height:36px;border-radius:10px;background:#F3F4F6;color:#9CA3AF;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.2s;font-family:inherit}
+.sb-l{font-size:11px;color:#9CA3AF;font-weight:500;transition:.2s}
+.sb-i.done .sb-d{background:#E0F2F1;color:#00796B;font-size:13px}
+.sb-i.done .sb-l{color:#9CA3AF}
+.sb-i.active .sb-d{background:#1A1A2E;color:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(26,26,46,.3)}
+.sb-i.active .sb-l{color:#1A1A2E;font-weight:800}
 
 /* ── HEADER ── */
 .hdr{flex-shrink:0;background:linear-gradient(90deg,#1A1040,#2A1560);padding:7px 20px;display:flex;align-items:center;justify-content:space-between}
@@ -33,15 +31,49 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
 .hdr-brand span{color:#A78BFF}
 .hdr-sub{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
 
+/* ── NARR BAR (header 아래) ── */
+.narr-bar{flex-shrink:0;background:linear-gradient(90deg,#F0EBFF,#F8F5FF);border-bottom:1px solid #DDD5FF;padding:6px 20px;display:flex;align-items:center;gap:8px}
+.narr-ico{font-size:12px;flex-shrink:0}
+.narr-txt{font-size:11px;color:#5B3FE4;font-style:italic;flex:1}
+.next-scene-btn{padding:5px 14px;border-radius:13px;border:2px solid var(--acc);color:var(--acc);background:#F0FFF8;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;animation:pulse 1.5s ease infinite;flex-shrink:0;display:none}
+
 /* ── ARENA ── */
-.arena{flex:1;display:grid;grid-template-columns:340px 1fr;gap:14px;padding:11px 20px 5px;overflow:hidden;min-height:0}
+.arena{flex:1;display:grid;grid-template-columns:315px 1fr;gap:14px;padding:8px 20px 6px;overflow:hidden;min-height:0}
+
+/* ── COLUMN HEADERS ── */
+.col-hdr{height:40px;display:flex;align-items:center;gap:6px;flex-shrink:0;padding:0 0 4px}
+.col-role-fixed{font-size:11px;font-weight:800;color:var(--text)}
+.ws-role-btn{padding:5px 12px;border-radius:13px;border:1.5px solid var(--border);background:#fff;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+.ws-role-btn.on{background:var(--p);border-color:var(--p);color:#fff}
+
+/* ── 폰 채팅 입력창 (채팅창 하단) ── */
+.p-inp-bar{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:7px 10px;background:#fff;border-top:1px solid #E0E0E0}
+.p-inp-field{flex:1;border:1.5px solid #E0E0E0;border-radius:20px;padding:7px 12px;font-size:12px;font-family:inherit;background:#F8F8F8;color:var(--text);outline:none}
+.p-inp-field:focus{border-color:#FAE100;background:#fff}
+.p-inp-field::placeholder{color:#B0B0B0;font-size:11px}
+.p-send-btn{width:32px;height:32px;border-radius:50%;background:#FAE100;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:.15s}
+.p-send-btn:hover{background:#F0D800;transform:scale(1.05)}
+
+/* ── 게스트 칩 (세로 나열) ── */
+#guest-chips{flex-direction:column;align-items:stretch;gap:3px;overflow-y:auto;height:120px;min-height:120px;max-height:120px;padding:4px 0}
+#guest-chips .chip{text-align:left;white-space:normal;width:100%;border-radius:8px;padding:7px 11px;font-size:11px;line-height:1.4}
+#guest-chips .chip-lbl{font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;padding:2px 0}
+
+/* ── WS 칩 (세로 나열) ── */
+#ws-chips{flex-direction:column;align-items:stretch;gap:3px;overflow-y:auto;height:120px;min-height:120px;max-height:120px;padding:4px 0}
+#ws-chips .chip{text-align:left;white-space:normal;width:100%;border-radius:8px;padding:7px 11px;font-size:11px;line-height:1.4}
+#ws-chips .chip-lbl{font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;padding:2px 0}
+
+/* ── PANEL FEATURE BUTTONS ── */
+.panel-feat{flex-shrink:0;display:flex;gap:6px;padding:4px 0 0;overflow-x:auto}
+.api-note-sm{font-size:10px;color:var(--muted);white-space:nowrap;padding:3px 9px;background:#F8F5FF;border-radius:9px;border:1px dashed #DDD5FF;flex-shrink:0;margin-left:auto}
 
 /* ── PHONE ── */
 .phone-col{display:flex;flex-direction:column;gap:6px;min-height:0}
 .sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-shrink:0}
 .bg{padding:2px 8px;border-radius:9px;font-size:10px;font-weight:700}
 .bg-g{background:#FFF3CD;color:#856404}.bg-b{background:#D4EDDA;color:#155724}.bg-a{background:#D1ECF1;color:#0C5460}
-.phone{width:320px;flex:1;min-height:0;border-radius:38px;border:8px solid #1C1C1E;box-shadow:0 0 0 1px #3a3a3c,0 18px 48px rgba(0,0,0,.3);overflow:hidden;background:#000;position:relative;display:flex;flex-direction:column}
+.phone{width:290px;flex:1;min-height:0;border-radius:40px;border:8px solid #1C1C1E;box-shadow:0 0 0 1px #3a3a3c,0 18px 48px rgba(0,0,0,.3);overflow:hidden;background:#000;position:relative;display:flex;flex-direction:column}
 .notch{width:108px;height:20px;background:#1C1C1E;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:50;pointer-events:none}
 .player{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;z-index:1;transition:opacity .3s}
 .player.on{opacity:1;pointer-events:all;z-index:10}
@@ -178,7 +210,7 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
 
 /* ── WORKSPACE ── */
 .ws-col{display:flex;flex-direction:column;gap:6px;min-height:0}
-.workspace{flex:1;min-height:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.07);display:grid;grid-template-columns:188px 1fr 230px}
+.workspace{flex:1;min-height:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.07);display:grid;grid-template-columns:188px 1fr 470px}
 
 /* Sidebar */
 .ws-side{background:var(--sidebar);display:flex;flex-direction:column;overflow:hidden}
@@ -267,8 +299,8 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
 .ok-badge{background:#D4EDDA;color:#155724}.warn-badge{background:#FFF3CD;color:#856404}
 
 /* Right panel */
-.ws-right{overflow-y:auto;padding:10px;background:#FAFBFD;display:flex;flex-direction:column;gap:6px;min-width:0}
-.rp-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);padding-bottom:5px;border-bottom:1px solid var(--border)}
+.ws-right{overflow:hidden;display:flex;flex-direction:row;min-width:0}
+.rp-title{font-size:10px;font-weight:800;color:var(--muted);padding:9px 12px 7px;border-bottom:1px solid var(--border);flex-shrink:0;background:#FAFBFD;text-transform:uppercase;letter-spacing:.5px}
 .rcard{background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px}
 .rc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
 .rc-t{font-size:11px;font-weight:700}
@@ -355,6 +387,18 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
 @keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
+.chip.inactive{background:#E5E7EB!important;color:#9CA3AF!important;cursor:not-allowed;border-color:#D1D5DB!important}
+.chip.done-chip{background:#D1FAE5!important;color:#6B7280!important;cursor:default;opacity:.6}
+/* ── CENTER ACTION POPUP ── */
+#action-popup-ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10000;pointer-events:none}
+.action-popup-box{background:#fff;border-radius:20px;padding:32px 36px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 70px rgba(91,63,228,.3);border:2px solid #EDE9FF;pointer-events:all;animation:fadeUp .35s ease}
+.action-popup-ico{font-size:40px;margin-bottom:14px}
+.action-popup-title{font-size:18px;font-weight:800;color:#1A1A2E;margin-bottom:8px}
+.action-popup-desc{font-size:13px;color:#6B7280;line-height:1.7;margin-bottom:22px}
+.action-popup-btn{background:var(--p);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;width:100%;transition:.15s}
+.action-popup-btn:hover{background:#4A2FD0}
+.action-popup-skip{font-size:11px;color:var(--muted);margin-top:10px;cursor:pointer;text-decoration:underline}
+
 .hide{display:none!important}
 </style>
 </head>
@@ -366,11 +410,10 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
   <div class="sb-i" id="sb2" onclick="gotoScene(2)"><span class="sb-d">2</span><span class="sb-l">비즈폼</span></div>
   <div class="sb-i" id="sb3" onclick="gotoScene(3)"><span class="sb-d">3</span><span class="sb-l">URL 추적</span></div>
   <div class="sb-i" id="sb4" onclick="gotoScene(4)"><span class="sb-d">4</span><span class="sb-l">자동 할당</span></div>
-  <div class="sb-i" id="sb5" onclick="gotoScene(5)"><span class="sb-d">5</span><span class="sb-l">할일 목록</span></div>
+  <div class="sb-i" id="sb5" onclick="gotoScene(5)"><span class="sb-d">5</span><span class="sb-l">내 대화</span></div>
   <div class="sb-i" id="sb6" onclick="gotoScene(6)"><span class="sb-d">6</span><span class="sb-l">비밀 메시지</span></div>
-  <div class="sb-i" id="sb7" onclick="gotoScene(7)"><span class="sb-d">7</span><span class="sb-l">공지+읽음</span></div>
+  <div class="sb-i" id="sb7" onclick="gotoScene(7)"><span class="sb-d">7</span><span class="sb-l">공지·읽음</span></div>
   <div class="sb-i" id="sb8" onclick="gotoScene(8)"><span class="sb-d">8</span><span class="sb-l">대시보드</span></div>
-  <div class="sb-title" id="sb-title">🎬 SCENE 1 — "아무나 못 들어옵니다"</div>
 </div>
 
 <!-- HEADER -->
@@ -381,11 +424,22 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
   </div>
 </div>
 
+<!-- NARR BAR -->
+<div class="narr-bar">
+  <span class="narr-ico">🎬</span>
+  <span class="narr-txt" id="narr-txt">박대표가 이직 후 WON TALK 채널에 입장하려 합니다.</span>
+  <button class="next-scene-btn" id="next-btn-el" onclick="doNextScene()">다음 장면 →</button>
+</div>
+
 <!-- ARENA -->
 <div class="arena">
   <!-- PHONE -->
   <div class="phone-col">
-    <div class="sec-lbl" id="phone-lbl">📱 파트너(AG) 화면 <span class="bg bg-g">GUEST</span></div>
+    <!-- 역할 헤더 (고정) -->
+    <div class="col-hdr">
+      <span class="col-role-fixed">📱 박대표 (Guest)</span>
+      <span class="bg bg-g">GUEST</span>
+    </div>
     <div class="phone">
       <div class="notch"></div>
 
@@ -400,13 +454,8 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
             </div>
             <span class="kakao-menu">≡</span>
           </div>
-          <div class="kakao-msgs" id="kakao-msgs">
+          <div class="kakao-msgs" id="kakao-msgs" style="padding-bottom:52px">
             <div style="text-align:center;font-size:9px;color:#777;padding:4px">2026년 7월 8일</div>
-          </div>
-          <div class="kakao-input-area">
-            <span class="kakao-plus">+</span>
-            <div class="kakao-inp">메시지를 입력하세요</div>
-            <span class="kakao-send">➤</span>
           </div>
         </div>
       </div>
@@ -480,7 +529,7 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
           <div style="font-size:14px;color:var(--muted)">🔍</div>
         </div>
         <div class="p-notice" id="p-notice"><span id="p-notice-txt"></span></div>
-        <div class="p-msgs" id="p-msgs"></div>
+        <div class="p-msgs" id="p-msgs" style="padding-bottom:52px"></div>
       </div>
 
       <!-- ④ BIZFORM -->
@@ -522,12 +571,30 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
           </div>
         </div>
       </div>
+      <!-- 폰 고정 입력창 (항상 하단에 표시) -->
+      <div id="p-fixed-inp" style="position:absolute;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid #E0E0E0;display:flex;align-items:center;gap:6px;padding:7px 10px 10px">
+        <span style="font-size:18px;color:#aaa;cursor:pointer">+</span>
+        <input id="phone-inp" style="flex:1;border:1.5px solid #E0E0E0;border-radius:20px;padding:7px 12px;font-size:12px;font-family:inherit;background:#F8F8F8;color:#1A1A2E;outline:none" placeholder="메시지를 입력하세요..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendPhone()}" onfocus="this.style.borderColor='#FAE100';this.style.background='#fff'" onblur="this.style.borderColor='#E0E0E0';this.style.background='#F8F8F8'">
+        <button onclick="sendPhone()" style="width:32px;height:32px;border-radius:50%;background:#FAE100;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">▶</button>
+      </div>
+    </div><!-- /phone -->
+    <!-- 게스트 기능 버튼 -->
+    <div class="panel-feat">
+      <button class="fc" id="fc-bf" onclick="openBf()">📋 비즈폼 작성</button>
+      <button class="fc" onclick="openTasks()">💬 내 대화 보기</button>
     </div>
-  </div>
+    <!-- 게스트 대사 칩 (세로) -->
+    <div class="chips-row" id="guest-chips"><span class="chip-lbl">💬 대사 선택</span></div>
+  </div><!-- /phone-col -->
 
   <!-- WORKSPACE -->
   <div class="ws-col">
-    <div class="sec-lbl">🖥 Spectra Workspace <span class="bg bg-b" id="ws-role-badge">우리금융캐피탈 BR</span></div>
+    <!-- WS 역할 선택 헤더 -->
+    <div class="col-hdr">
+      <button class="ws-role-btn on" id="ws-rb-b" onclick="setWsRole('br')">🖥 김경화 BR</button>
+      <button class="ws-role-btn" id="ws-rb-a" onclick="setWsRole('admin')">👔 최센터장</button>
+      <span class="bg bg-b" id="ws-role-badge" style="margin-left:auto">우리금융캐피탈 BR</span>
+    </div>
     <div class="workspace">
       <div class="ws-side">
         <div class="ws-shdr"><div class="ws-logo">우리금융캐피탈</div><div class="ws-online">● 근무중</div></div>
@@ -572,36 +639,29 @@ body{font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
         </div>
       </div>
 
-      <div class="ws-right" id="ws-right">
-        <div class="rp-title">시나리오 가이드</div>
-        <div style="background:linear-gradient(135deg,#F8F5FF,#F0EBFF);border:1px solid #DDD5FF;border-radius:9px;padding:9px" id="hint-box"><div id="hint-body"></div></div>
-        <div id="dynamic-panel"></div>
+      <div class="ws-right" id="ws-right" style="display:flex;flex-direction:row;gap:0;overflow:hidden;border-left:1px solid #F0F3FA">
+        <!-- 좌: 파트너 초대관리 -->
+        <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #F0F3FA;overflow:hidden">
+          <div class="rp-title" style="flex-shrink:0">🤝 파트너 초대관리</div>
+          <div id="dynamic-panel" style="flex:1;overflow-y:auto;padding:0 10px 10px"></div>
+        </div>
+        <!-- 우: 현재 스크립트 -->
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div class="rp-title" style="flex-shrink:0">📋 현재 스크립트</div>
+          <div id="hint-box" style="flex:1;overflow-y:auto;padding:0 10px 10px"></div>
+        </div>
       </div>
+    </div><!-- /workspace -->
+    <!-- BR/관리자 기능 버튼 -->
+    <div class="panel-feat">
+      <button class="fc fc-sec" onclick="openSecret()">🔒 비밀 메시지</button>
+      <button class="fc fc-not hide" id="fc-not" onclick="pinNotice()">📢 공지 등록</button>
+      <div class="api-note-sm">🔧 시스템 확정 후 AI API 연동 예정</div>
     </div>
-  </div>
-</div>
-
-<!-- DOCK -->
-<div class="dock">
-  <div class="dock-r1">
-    <div class="role-sw">
-      <button class="rsb on" id="rb-g" onclick="setRole('guest')">📱 박대표</button>
-      <button class="rsb" id="rb-b" onclick="setRole('br')">🖥 김경화 BR</button>
-      <button class="rsb" id="rb-a" onclick="setRole('admin')">👔 최센터장</button>
-    </div>
-    <input class="msg-inp" id="main-inp" placeholder="아래 대사를 선택하거나 직접 입력" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFree()}">
-    <button class="send-btn" onclick="sendFree()">전송 ▶</button>
-  </div>
-  <div class="narr" id="narr-bar"><span class="narr-ico">🎬</span><span id="narr-txt">박대표가 이직 후 WON TALK 채널에 입장하려 합니다. 먼저 기존 방식대로 김경화에게 카카오톡으로 연락합니다.</span></div>
-  <div class="chips-row" id="chips-row"><span class="chip-lbl">💬 대사:</span></div>
-  <div class="dock-r3">
-    <button class="fc" id="fc-bf" onclick="openBf()">📋 비즈폼 작성</button>
-    <button class="fc fc-sec" onclick="openSecret()">🔒 비밀 메시지</button>
-    <button class="fc" onclick="openTasks()">💬 내 대화 보기</button>
-    <button class="fc fc-not hide" id="fc-not" onclick="pinNotice()">📢 공지 등록</button>
-    <div class="api-note">🔧 시스템 확정 후 AI 자동응답 API 연동 예정</div>
-  </div>
-</div>
+    <!-- BR/관리자 대사 칩 -->
+    <div class="chips-row" id="ws-chips"><span class="chip-lbl">💬</span></div>
+  </div><!-- /ws-col -->
+</div><!-- /arena -->
 
 <!-- MODALS -->
 <div class="warn-ov" id="warn-ov" onclick="closeWarn()"></div>
@@ -644,9 +704,11 @@ const INIT_WT = [
 
 // ── STATE ──
 const S = {
-  role:'guest', scene:1, uid:9871,
+  role:'guest', wsRole:'br', scene:1, uid:9871,
   readN:0, readIv:null, noticePinned:false, authDone:false,
   dashMode:false, dashTab:'ag',
+  selectedChip:null, selectedWsChip:null,
+  globalChipIdx:0, lastSecretId:null, waitForManual:false,
   tasks:[
     {id:9841, t:'금리 문의 — 이철수', s:'캐스퍼 일렉트릭 · 07.07', st:'pend', mid:null},
     {id:9803, t:'대출 승인 — 김민준', s:'K8 하이브리드 · 07.06',  st:'done', mid:null},
@@ -665,12 +727,11 @@ const SCRIPTS = {
     ]
   },
   2:{
-    narr:'박대표가 채팅방에서 대출 접수를 시도합니다. 먼저 말을 꺼내고, 고객 개인정보를 텍스트로 입력하려 하지만...',
+    narr:'박대표가 개인정보를 텍스트로 입력하려 하지만, 시스템이 자동 차단합니다. BR이 비즈폼을 전달합니다.',
     lines:[
       {type:'g', text:'신규 대출 건 접수합니다. 고객 홍길동인데요.'},
       {type:'w', text:'주민번호 뒷자리 1234567, 아이오닉6 3500만원 건 처리 부탁드립니다'},
-      {type:'g', text:'(비즈폼 클릭) 오, 고객 정보가 자동으로 입력됐네요! 이렇게 하면 되는 거죠?', trig:'open_bf',
-       resp:{w:'김경화', t:'네! 비즈폼으로 들어온 건 개인정보가 시스템 내에서 비식별화 처리돼서 단체방에 절대 원문이 노출 안 돼요. 금감원 감사도 문제없습니다.'}},
+      {type:'b', text:'박대표님, 개인정보는 비즈폼으로 접수해 주세요! 아래 비즈폼을 탭해서 작성해 주시면 바로 처리해 드릴게요 😊', trig:'send_bf_card'},
     ]
   },
   3:{
@@ -689,22 +750,23 @@ const SCRIPTS = {
   5:{
     narr:'박대표가 "내 대화 보기" 탭 하나로 본인이 신청한 모든 건의 진행 상태와 대화 내역을 직접 확인합니다.',
     lines:[
-      {type:'g', text:'아까 접수한 #9872 건 어떻게 됐지? (내 대화 보기 탭 클릭)', trig:'open_tasks',
+      {type:'g', text:'아까 접수한 #9872 건 어떻게 됐지? (내 대화 보기 탭 클릭)',
+       preTrig:'open_tasks',
        resp:{w:'김경화', t:'"어떻게 됐어요?" 문의 안 하셔도 돼요! 탭 하나로 본인 건 상태 바로 확인 가능합니다.'}},
     ]
   },
   6:{
-    narr:'수수료율 같은 민감한 정보는 단체방 노출 없이 특정 파트너에게만 비밀 메시지로 전달합니다.',
+    narr:'수수료율 같은 민감 정보는 단체방 노출 없이 비밀 메시지로 1:1 전달합니다.',
     lines:[
-      {type:'b', text:'(단체방에 수수료율을 노출하면 안 되니, 비밀 메시지를 전송합니다.)', trig:'send_locked_secret'},
-      {type:'g', text:'(🔒 버블 탭 → 잠금 해제) 아, 이렇게 나오는군요! 예전엔 카톡 1:1로 따로 해야 했는데.',
-       resp:{w:'김경화', t:'단체방 효율성은 유지하면서 개별 협상 정보는 완벽히 보호됩니다 😊'}},
+      {type:'g', text:'김경화님, 이번달 저한테만 적용되는 우대 금리가 있나요?',
+       resp:{w:'김경화', t:'네! 단체방에서는 말씀드리기 어려우니 비밀 메시지로 바로 보내드릴게요 😊'}},
+      {type:'b', text:'박대표님, 이번 분기 우대 수수료율 [2.15%] 특별 적용 안내드립니다.', trig:'show_secret_input'},
     ]
   },
   7:{
     narr:'센터장이 공지를 등록하면 상단에 고정되고, 4,000명의 읽음 여부를 실시간으로 추적합니다.',
     lines:[
-      {type:'a', text:'금리 변경 공지 등록합니다. 파트너 4,000명 알림톡 동시 발송이에요.', trig:'pin_notice'},
+      {type:'a', text:'금리 변경 공지 등록합니다. 파트너 4,000명 알림톡 동시 발송이에요.', trig:'activate_notice_input'},
     ]
   },
   8:{
@@ -730,8 +792,15 @@ const TITLES = {
 function gt(){const n=new Date();return n.getHours()+':'+(n.getMinutes()<10?'0':'')+n.getMinutes()}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 function scrollAll(){setTimeout(()=>{['p-msgs','ws-msgs','kakao-msgs'].forEach(id=>{const e=document.getElementById(id);if(e)e.scrollTop=e.scrollHeight})},60)}
-function showLayer(id){document.querySelectorAll('.player').forEach(l=>l.classList.remove('on'));document.getElementById(id).classList.add('on')}
-function markDone(n){const e=document.getElementById('sb'+n);if(e){e.classList.add('done');e.classList.remove('active');}}
+function showLayer(id){
+  document.querySelectorAll('.player').forEach(l=>l.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  // 입력창: 카카오 또는 채팅방일 때만 표시
+  const showInp=['pl-kakao','pl-chat'].includes(id);
+  const fi=document.getElementById('p-fixed-inp');
+  if(fi)fi.style.display=showInp?'flex':'none';
+}
+function markDone(n){const e=document.getElementById('sb'+n);if(e){e.classList.add('done');e.classList.remove('active');const d=e.querySelector('.sb-d');if(d)d.textContent='✓';}}
 
 // ── INIT ──
 function initWonTalk(){
@@ -753,138 +822,254 @@ function initWonTalk(){
 
 // ── SCENE ──
 function gotoScene(n){
-  S.scene=n;
-  document.querySelectorAll('.sb-i').forEach((e,i)=>{e.classList.toggle('done',i<n-1);e.classList.toggle('active',i===n-1);});
-  document.getElementById('sb-title').textContent=TITLES[n]||'';
+  S.scene=n; S.globalChipIdx=0;
+  document.querySelectorAll('.sb-i').forEach((e,i)=>{e.classList.toggle('done',i<n-1);e.classList.toggle('active',i===n-1);if(i<n-1){const d=e.querySelector('.sb-d');if(d&&d.textContent!=='✓')d.textContent='✓';}});
   const sc=SCRIPTS[n];
-  if(sc){
-    document.getElementById('narr-txt').textContent=sc.narr;
-    document.getElementById('narr-bar').style.display='flex';
-  }
+  if(sc) document.getElementById('narr-txt').textContent=sc.narr;
   if(n>1){
-    const sep=TITLES[n];
-    document.getElementById('p-msgs').innerHTML+=`<div class="p-sep">${sep}</div>`;
-    document.getElementById('ws-msgs').innerHTML+=`<div class="ws-sep">${sep}</div>`;
+    document.getElementById('p-msgs').innerHTML+=`<div class="p-sep">${TITLES[n]}</div>`;
+    document.getElementById('ws-msgs').innerHTML+=`<div class="ws-sep">${TITLES[n]}</div>`;
     scrollAll();
+    if(S.authDone)showLayer('pl-chat');
   }
-  if([1,2,3,5].includes(n))setRole('guest');
-  else if([4,6].includes(n))setRole('br');
-  else if([7,8].includes(n))setRole('admin');
-  renderChips();
+  if([4,6].includes(n))setWsRole('br');
+  else if([7,8].includes(n))setWsRole('admin');
+  renderAllChips();
+  updateScriptPanel();
+}
+function autoAdvance(){
+  if(S.scene>=8)return;
+  markDone(S.scene);
+  setTimeout(()=>gotoScene(S.scene+1),500);
+}
+function chipDone(){
+  S.globalChipIdx++;
+  renderAllChips();
+  updateScriptPanel();
+  const sc=SCRIPTS[S.scene];
+  if(!sc)return;
+  if(S.globalChipIdx>=sc.lines.length){
+    // Scene 1은 auth 완료 시 doAuth()에서 gotoScene(2) 호출 - 자동 전환 금지
+    if(S.scene===1)return;
+    setTimeout(autoAdvance,1600);
+  } else {
+    const next=sc.lines[S.globalChipIdx];
+    if(next?.autoFire){
+      setTimeout(()=>handleChip(next,['b','a'].includes(next.type)?'ws':'guest'),700);
+    }
+  }
 }
 
-// ── ROLE ──
-function setRole(r){
-  S.role=r;
-  const ph={'guest':'박대표로 메시지 입력...','br':'김경화 BR로 메시지 입력...','admin':'최센터장으로 메시지 입력...'};
-  document.getElementById('main-inp').placeholder=ph[r];
-  ['guest','br','admin'].forEach(x=>document.getElementById('rb-'+x[0]).classList.toggle('on',r===x));
-  document.getElementById('fc-bf').style.display=r==='guest'?'':'none';
+// ── WS 역할 전환 ──
+function setWsRole(r){
+  S.wsRole=r; S.role=r;
+  document.getElementById('ws-rb-b').classList.toggle('on',r==='br');
+  document.getElementById('ws-rb-a').classList.toggle('on',r==='admin');
+  const el=document.getElementById('ws-role-badge');
+  el.textContent=r==='admin'?'우리금융캐피탈 센터장':'우리금융캐피탈 BR';
+  el.className='bg '+(r==='admin'?'bg-a':'bg-b');
   document.getElementById('fc-not').style.display=r==='admin'?'':'none';
-  document.getElementById('ws-role-badge').textContent=r==='admin'?'우리금융캐피탈 센터장':'우리금융캐피탈 BR';
-  renderChips();
+  renderWsChips();
 }
 
-// ── CHIPS ──
-function renderChips(){
-  const row=document.getElementById('chips-row');
-  const sc=SCRIPTS[S.scene];if(!sc){row.innerHTML='<span class="chip-lbl">💬</span>';return;}
-  const rmap={'guest':'g','br':'b','admin':'a'};
-  const cur=rmap[S.role];
-  const lines=sc.lines.filter(c=>c.type===cur||c.type==='k'||c.type==='w');
-  row.innerHTML='<span class="chip-lbl">💬 대사:</span>';
-  if(!lines.length){
-    const others=new Set(sc.lines.map(c=>c.type));
-    const names={g:'[📱 박대표]',b:'[🖥 김경화 BR]',a:'[👔 최센터장]',k:'[📱 박대표]',w:'[📱 박대표]'};
-    const need=[...others].filter(t=>t!==cur).map(t=>names[t]).join(', ');
-    row.innerHTML+=`<span style="font-size:11px;color:var(--muted);font-style:italic">이 장면은 ${need||'다른 역할'}의 차례입니다</span>`;
+// ── CHIPS (단일 globalChipIdx) ──
+function renderAllChips(){
+  renderGuestChips();
+  renderWsChips();
+}
+function showNextBtn(){}  // 사용 안 함 - autoAdvance로 대체
+function doNextScene(){autoAdvance();}
+
+function renderGuestChips(){
+  const row=document.getElementById('guest-chips');
+  const sc=SCRIPTS[S.scene];
+  row.innerHTML='<span class="chip-lbl">💬 대사 선택</span>';
+  if(!sc){return;}
+  const all=sc.lines;
+  // 완료된 칩은 숨기고 남은 것만 표시
+  const remaining=all.filter((chip,idx)=>['g','k','w'].includes(chip.type)&&idx>=S.globalChipIdx);
+  if(!remaining.length){
+    const hasWs=all.some((c,i)=>['b','a'].includes(c.type)&&i>=S.globalChipIdx);
+    if(hasWs)row.innerHTML+='<span style="font-size:11px;color:var(--muted);font-style:italic;padding:4px 2px">→ 워크스페이스 차례입니다</span>';
     return;
   }
-  lines.forEach(chip=>{
+  remaining.forEach(chip=>{
+    const globalIdx=all.indexOf(chip);
+    const isActive=globalIdx===S.globalChipIdx;
     const btn=document.createElement('button');
-    const cls=chip.type==='k'?'chip k':chip.type==='w'?'chip w':chip.type==='b'?'chip b':chip.type==='a'?'chip a':'chip g';
-    btn.className=cls;
-    if(chip.type==='k')btn.title='📱 카카오톡으로 전송됩니다';
-    const short=chip.text.length>46?chip.text.slice(0,45)+'…':chip.text;
-    btn.textContent=(chip.type==='k'?'💬 ':'')+short;
-    btn.title=chip.text;
-    btn.onclick=()=>handleChip(chip,btn);
+    const base=chip.type==='w'?'chip w':chip.type==='k'?'chip k':'chip g';
+    btn.className=isActive?base:'chip inactive';
+    btn.textContent=(chip.type==='k'?'💬 ':chip.type==='w'?'⚠️ ':'')+chip.text;
+    btn.disabled=!isActive;
+    if(isActive){btn.onclick=()=>{
+      const inp=document.getElementById('phone-inp');
+      if(inp)inp.value=chip.text;
+      S.selectedChip=chip;
+    };}
     row.appendChild(btn);
   });
-  showNextBtn(false);
 }
 
-function showNextBtn(show){
-  document.getElementById('next-btn-el')?.remove();
-  if(!show||S.scene>=8)return;
-  const btn=document.createElement('button');
-  btn.id='next-btn-el';btn.className='next-btn';
-  btn.textContent=`✓ SCENE ${S.scene+1}으로 →`;
-  btn.onclick=()=>{markDone(S.scene);gotoScene(S.scene+1);};
-  document.getElementById('chips-row').appendChild(btn);
-}
-
-function handleChip(chip,btn){
-  if(btn)btn.disabled=true;
-  
-  if(chip.type==='w'){
-    // Personal info warning demo
-    addKakaoMsg(chip.text.replace(' → [차단됨] 팝업 확인',''),'박대표');
-    setTimeout(()=>showWarn(),300);
+function renderWsChips(){
+  const row=document.getElementById('ws-chips');
+  const sc=SCRIPTS[S.scene];
+  row.innerHTML='<span class="chip-lbl">💬 대사 선택</span>';
+  if(!sc){return;}
+  const all=sc.lines;
+  const cur=S.wsRole==='admin'?'a':'b';
+  // 완료된 칩 숨기고 남은 것만
+  const remaining=all.filter((chip,idx)=>chip.type===cur&&idx>=S.globalChipIdx);
+  if(!remaining.length){
+    const hasGuest=all.some((c,i)=>['g','k','w'].includes(c.type)&&i>=S.globalChipIdx);
+    if(hasGuest)row.innerHTML+='<span style="font-size:11px;color:var(--muted);font-style:italic;padding:4px 2px">→ 박대표 차례입니다</span>';
     return;
   }
-  
-  if(chip.type==='k'){
-    // KakaoTalk message - goes to kakao view only, NOT WON TALK
-    addKakaoMsg(chip.text,'박대표');
-    // Workspace: show kakao notification
-    showKakaoNotif(chip.text);
-  } else if(chip.type==='g'){
-    addGuestMsg(chip.text);
-  } else if(chip.type==='b'){
-    addBRMsg(C['김경화'],chip.text);
-  } else if(chip.type==='a'){
-    addOtherMsg(chip.text,'최센터장',C['최센터장']);
+  remaining.forEach(chip=>{
+    const globalIdx=all.indexOf(chip);
+    const isActive=globalIdx===S.globalChipIdx;
+    const btn=document.createElement('button');
+    const base=cur==='a'?'chip a':'chip b';
+    btn.className=isActive?base:'chip inactive';
+    btn.textContent=chip.text;
+    btn.disabled=!isActive;
+    if(isActive){btn.onclick=()=>{
+      const inp=document.getElementById('ws-inp-f');
+      if(inp){inp.value=chip.text;inp.focus();}
+      S.selectedWsChip=chip;
+    };}
+    row.appendChild(btn);
+  });
+}
+
+// ── 전송 ──
+function sendPhone(){
+  const inp=document.getElementById('phone-inp');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';
+  const chip=S.selectedChip; S.selectedChip=null;
+  if(chip&&chip.type==='w'){showWarnBoth();return;}
+  if(!chip&&/주민번호|뒷자리|\d{6}[-\s]\d{7}/.test(text)){showWarnBoth();return;}
+  if(chip&&chip.text===text){handleChip(chip,'guest');return;}
+  if(S.scene===1){addKakaoMsg(text,'박대표');return;}
+  addGuestMsg(text);
+}
+function sendWsRole(){
+  const inp=document.getElementById('ws-inp-f');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';
+  const chip=S.selectedWsChip; S.selectedWsChip=null;
+  if(chip&&chip.text===text){handleChip(chip,'ws');return;}
+  if(S.wsRole==='admin')addOtherMsg(text,'최센터장',C['최센터장']);
+  else addBRMsg(C['김경화'],text);
+}
+function sendGuest(){sendPhone();}
+function sendFree(){sendPhone();}
+function sendWs(){sendWsRole();}
+
+function handleChip(chip, area){
+  if(chip.type==='w'){
+    showWarnBoth();
+    chipDone();
+    return;
   }
-  
-  if(chip.trig)setTimeout(()=>execTrig(chip.trig),350);
-  
+  // preTrig: 응답 전 즉시 실행 (예: 내 대화 보기 자동 오픈)
+  if(chip.preTrig) setTimeout(()=>execTrig(chip.preTrig, null), 150);
+
+  // autoFire 칩은 텍스트 없이 트리거만 실행
+  if(!chip.autoFire){
+    if(chip.type==='k'){addKakaoMsg(chip.text,'박대표');showKakaoNotif(chip.text);}
+    else if(chip.type==='g')addGuestMsg(chip.text);
+    else if(chip.type==='b')addBRMsg(C['김경화'],chip.text);
+    else if(chip.type==='a')addOtherMsg(chip.text,'최센터장',C['최센터장']);
+  }
+
+  const done=()=>{
+    if(chip.trig){
+      execTrig(chip.trig,()=>chipDone());
+    } else {
+      chipDone();
+    }
+  };
+
   if(chip.resp){
-    const delay=chip.type==='k'?1200:950;
+    const delay=chip.type==='k'?1200:900;
     if(chip.resp.mode==='kakao'){
-      // BR responds via KakaoTalk
       showKakaoTyping(delay,()=>{
         addKakaoMsg(chip.resp.t,chip.resp.w);
-        // After kakao exchange, show invite button active
         if(S.scene===1)setTimeout(()=>activateInviteBtn(),600);
-        checkLastChip(chip,sc_lines());
+        done();
       });
     } else {
       showWsTyping(chip.resp.w,delay,()=>{
         const cast=C[chip.resp.w];
         if(cast?.r==='br')addBRMsg(cast,chip.resp.t);
         else addGuestMsg(chip.resp.t);
-        checkLastChip(chip,sc_lines());
+        done();
       });
     }
   } else {
-    checkLastChip(chip,sc_lines());
+    done();
   }
 }
-function sc_lines(){const sc=SCRIPTS[S.scene];if(!sc)return[];const rm={'guest':'g','br':'b','admin':'a'};const cur=rm[S.role];return sc.lines.filter(c=>c.type===cur||c.type==='k'||c.type==='w');}
-function checkLastChip(chip,lines){
-  if(chip===lines[lines.length-1])setTimeout(()=>showNextBtn(true),chip.resp?700:400);
-}
 
-function execTrig(t){
-  if(t==='open_bf')openBf();
-  else if(t==='show_url_info'){showUrlPanel();markDone(3);setTimeout(()=>showNextBtn(true),300);}
-  else if(t==='open_tasks')openTasks();
-  else if(t==='send_locked_secret')sendLockedSecret();
-  else if(t==='pin_notice')pinNotice();
-  else if(t==='show_dash')toggleDash();
+// ── 폰 전송 ──
+
+function execTrig(t, cb){
+  if(t==='open_bf'){openBf();if(cb)cb();}
+  else if(t==='show_url_info'){showUrlPanel();markDone(3);if(cb)setTimeout(cb,300);}
+  else if(t==='open_tasks'){openTasks();if(cb)cb();}
+  else if(t==='pin_notice'){pinNotice(cb);}
+  else if(t==='activate_notice_input'){
+    // 워크스페이스 채팅에 공지 입력창 카드 표시
+    const wm=document.getElementById('ws-msgs');
+    const card=document.createElement('div');
+    card.id='notice-input-card';
+    card.style.cssText='background:#F8F5FF;border:2px solid var(--p);border-radius:10px;padding:12px;margin:8px 0;animation:fadeUp .3s ease';
+    card.innerHTML=`<div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:8px">📢 공지 내용을 입력하고 등록하세요</div><div style="display:flex;gap:6px"><input id="notice-text-inp" style="flex:1;border:1.5px solid #DDD5FF;border-radius:8px;padding:8px 12px;font-size:12px;font-family:inherit;outline:none" value="이번달 금리는 3.5%에서 3.1%로 변경됩니다" placeholder="공지 내용 입력..."><button onclick="submitNotice()" style="background:var(--p);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">등록 →</button></div><div style="font-size:10px;color:var(--muted);margin-top:5px">Enter 또는 등록 버튼으로 전송</div>`;
+    wm.appendChild(card);scrollAll();
+    setTimeout(()=>{
+      const inp=document.getElementById('notice-text-inp');
+      if(inp){inp.focus();inp.select();inp.onkeydown=(e)=>{if(e.key==='Enter'){e.preventDefault();submitNotice();}};}
+    },300);
+    S._noticeCb=cb; // cb 저장 (submitNotice에서 호출)
+  }
+  else if(t==='show_secret_input'){
+    // 칩 텍스트 가져오기 (비밀 메시지 내용)
+    const sc=SCRIPTS[S.scene];
+    const secretChip=sc?.lines.find(c=>c.trig==='show_secret_input');
+    const secretText=secretChip?.text||'박대표님, 이번 분기 우대 수수료율 [2.15%] 특별 적용 안내드립니다.';
+
+    // 워크스페이스 채팅에 비밀 메시지 입력창 표시
+    const wm=document.getElementById('ws-msgs');
+    const card=document.createElement('div');
+    card.id='secret-input-card';
+    card.style.cssText='background:#FFF0F7;border:2px solid #FFB3D1;border-radius:10px;padding:12px;margin:8px 0;animation:fadeUp .3s ease';
+    card.innerHTML=`<div style="font-size:11px;font-weight:700;color:#C2185B;margin-bottom:8px">🔒 비밀 메시지 작성 — 박대표님에게만 전달됩니다</div><div style="display:flex;gap:6px"><input id="secret-msg-inp" style="flex:1;border:1.5px solid #FFB3D1;border-radius:8px;padding:8px 12px;font-size:12px;font-family:inherit;outline:none;background:#fff" value="${secretText}" placeholder="비밀 메시지 입력..."><button onclick="sendSecretMsg()" style="background:#E91E8C;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:16px;cursor:pointer">➤</button></div><div style="font-size:10px;color:#888;margin-top:5px">전송(➤)을 클릭하면 박대표 폰과 워크스페이스에 동시 전송</div>`;
+    wm.appendChild(card);scrollAll();
+    setTimeout(()=>{
+      const inp=document.getElementById('secret-msg-inp');
+      if(inp){inp.focus();inp.select();inp.onkeydown=(e)=>{if(e.key==='Enter'){e.preventDefault();sendSecretMsg();}};}
+    },300);
+    S._secretCb=cb;
+  }
+  else if(t==='send_locked_secret'){
+    sendLockedSecret();
+    setTimeout(()=>{if(S.lastSecretId)revealSecret(S.lastSecretId);},2500);
+    setTimeout(()=>{if(cb)cb();},3500);
+  }
+  else if(t==='send_bf_card'){
+    addBRMsg(C['김경화'],'박대표님, 개인정보는 비즈폼으로 접수해 주세요! 아래 비즈폼을 탭해서 작성해 주시면 바로 처리해 드릴게요 😊');
+    setTimeout(()=>{
+      const pm=document.getElementById('p-msgs');
+      const card=document.createElement('div');
+      card.style.cssText='padding:4px 10px 6px';
+      card.innerHTML=`<div style="display:flex;gap:7px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:#2C3E50;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">김</div><div><div style="font-size:10px;font-weight:700;color:#666;margin-bottom:3px">김경화 (금리·대출 담당)</div><div onclick="openBf()" style="background:linear-gradient(135deg,#5B3FE4,#7B5FFF);border-radius:12px;padding:12px 14px;cursor:pointer;max-width:240px;box-shadow:0 2px 8px rgba(91,63,228,.3)"><div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:4px">📋 대출 승인 신청</div><div style="font-size:10px;color:rgba(255,255,255,.8);margin-bottom:8px">고객 정보를 안전하게 접수해 주세요</div><div style="background:rgba(255,255,255,.2);border-radius:7px;padding:5px 10px;text-align:center;font-size:11px;font-weight:700;color:#fff">탭하여 비즈폼 작성 →</div></div><div style="font-size:9px;color:#999;margin-top:3px">${gt()}</div></div></div>`;
+      pm.appendChild(card);scrollAll();
+      markDone(2);
+      if(cb)setTimeout(cb,400);
+    },600);
+  }
   else if(t==='notice_then_dash'){
-    // 공지 등록 후 대시보드 오픈
     const noticeText='[필독] 주간 AG 현황을 파악하겠습니다. 현황 파악 후, 금리 조정될 수 있습니다';
     S.noticePinned=true;
     document.getElementById('p-notice-txt').textContent=noticeText;
@@ -892,9 +1077,18 @@ function execTrig(t){
     document.getElementById('ws-nbar-txt').textContent=noticeText;
     document.getElementById('ws-nbar').classList.add('show');
     addSys('⚙ 공지 등록 완료 — 파트너 4,000명 알림톡 발송 중',true);
-    markDone(7);markDone(8);
-    setTimeout(()=>{toggleDash();},900);
+    markDone(8);
+    if(cb)setTimeout(cb,400);
+    // 대시보드 팝업 안내 후 강제 오픈
+    setTimeout(()=>{
+      showActionPopup('📊','채널 대시보드 확인하기',
+        '좌측 사이드바에서 <b>[채널 대시보드]</b>를<br>직접 클릭해서 확인하세요.',
+        '확인',
+        ()=>{S.dashMode=false;toggleDash();},
+        false);
+    },1200);
   }
+  else{if(cb)cb();}
 }
 
 // ── KAKAO MESSAGES ──
@@ -932,13 +1126,66 @@ function showKakaoNotif(text){
   panel.appendChild(d);
 }
 
+// ── CENTER ACTION POPUP ──
+function showActionPopup(ico, title, desc, btnText, onAction, skipText){
+  document.getElementById('action-popup-ov')?.remove();
+  const ov=document.createElement('div');ov.id='action-popup-ov';
+  const box=document.createElement('div');box.className='action-popup-box';
+  box.innerHTML=`<div class="action-popup-ico">${ico}</div><div class="action-popup-title">${title}</div><div class="action-popup-desc">${desc}</div><button class="action-popup-btn" id="action-popup-action-btn">${btnText}</button>${skipText?`<div class="action-popup-skip" onclick="hideActionPopup()">건너뛰기</div>`:''}`;
+  box.querySelector('#action-popup-action-btn').onclick=()=>{hideActionPopup();if(onAction)onAction();};
+  ov.appendChild(box);document.body.appendChild(ov);
+}
+function hideActionPopup(){document.getElementById('action-popup-ov')?.remove();}
+
 function activateInviteBtn(){
-  // Highlight the invite button after kakao exchange
   const btn=document.querySelector('#inv-btn-박대표');
-  if(btn&&!btn.disabled){
-    btn.style.animation='pulse 1.5s ease infinite';
-    btn.style.boxShadow='0 0 0 0 rgba(91,63,228,.4)';
+  if(btn&&!btn.disabled){btn.style.animation='pulse 1s ease infinite';btn.style.background='var(--p)';btn.style.color='#fff';}
+  showActionPopup(
+    '👆',
+    '초대 보내기를 클릭하세요',
+    '워크스페이스 우측 <b>파트너 초대관리</b> 패널에서<br><b>[초대 보내기]</b> 버튼을 직접 눌러주세요.',
+    '확인',
+    null,  // 액션 없음 - 팝업만 닫힘
+    false
+  );
+}
+function submitNotice(){
+  const inp=document.getElementById('notice-text-inp');
+  const text=(inp&&inp.value.trim())||'이번달 금리는 3.5%에서 3.1%로 변경됩니다';
+  document.getElementById('notice-input-card')?.remove();
+
+  // 폰 공지 배너 강제 표시
+  const pn=document.getElementById('p-notice');
+  const pnTxt=document.getElementById('p-notice-txt');
+  if(pnTxt)pnTxt.textContent='📌 '+text;
+  if(pn){pn.style.cssText='display:flex!important';pn.classList.add('show');}
+
+  // 워크스페이스 공지 배너 강제 표시
+  const wn=document.getElementById('ws-nbar');
+  const wnTxt=document.getElementById('ws-nbar-txt');
+  const wnCnt=document.getElementById('ws-read-cnt');
+  if(wnTxt)wnTxt.textContent=text;
+  if(wnCnt)wnCnt.textContent='집계 중...';
+  if(wn){wn.style.cssText='display:flex!important';wn.classList.add('show');}
+
+  // 워크스페이스 완료 카드
+  const wm=document.getElementById('ws-msgs');
+  if(wm){
+    const card=document.createElement('div');
+    card.style.cssText='background:linear-gradient(135deg,#5B3FE4,#7B5FFF);color:#fff;border-radius:12px;padding:14px 16px;margin:6px 0;animation:fadeUp .4s ease';
+    card.innerHTML=`<div style="font-size:11px;opacity:.8;margin-bottom:3px">📢 공지 등록 완료</div><div style="font-size:13px;font-weight:800;margin-bottom:4px">"${text}"</div><div style="font-size:11px;opacity:.85">파트너 4,000명에게 알림톡 발송 완료</div>`;
+    wm.appendChild(card);
+    const el=document.createElement('div');
+    el.style.cssText='background:#D1FAE5;border:1px solid #6EE7B7;border-radius:9px;padding:9px 14px;margin:6px 0;font-size:12px;color:#065F46;font-weight:600;animation:fadeUp .4s ease';
+    el.innerHTML='✅ <b>3,820명 확인 완료</b> (전체 4,000명 중 95.5%) — 미열람 180명 재알림 발송 준비됨';
+    wm.appendChild(el);
+    scrollAll();
   }
+  updateRight('read');
+  markDone(7);
+  S.noticePinned=true;
+  // Scene 7→8 전환
+  if(S._noticeCb){const f=S._noticeCb;S._noticeCb=null;f();}
 }
 
 // ── WON TALK MESSAGES ──
@@ -1021,21 +1268,6 @@ function showWsTyping(who,delay,cb){
   },delay);
 }
 
-function sendFree(){
-  const inp=document.getElementById('main-inp');
-  const text=inp.value.trim();if(!text)return;inp.value='';
-  if(S.role==='guest'){
-    if(/주민번호|뒷자리|\d{6}[-\s]\d{7}/.test(text)){addGuestMsg(text);setTimeout(()=>showWarn(),250);return;}
-    if(S.scene===1){addKakaoMsg(text,'박대표');return;}
-    addGuestMsg(text);
-  }else if(S.role==='br')addBRMsg(C['김경화'],text);
-  else addOtherMsg(text,'최센터장',C['최센터장']);
-}
-function sendWs(){
-  const inp=document.getElementById('ws-inp-f');
-  const t=inp.value.trim();if(!t)return;inp.value='';
-  addBRMsg(C['김경화'],t);
-}
 
 // ── INVITE PANEL ──
 function showInvitePanel(){
@@ -1055,15 +1287,22 @@ function showInvitePanel(){
 }
 
 function sendInvite(who){
+  hideActionPopup();
   const btnEl=document.getElementById('inv-btn-'+who.replace(' ',''));
   if(btnEl){btnEl.textContent='초대 발송 완료 ✓';btnEl.disabled=true;btnEl.style.background='var(--acc)';btnEl.style.animation='';}
-  // Phone → 알림톡 수신 화면
   showLayer('pl-alimtalk');
-  // Update right panel
   const notif=document.createElement('div');
   notif.style.cssText='margin-top:6px;background:#FAE100;border-radius:8px;padding:9px;animation:fadeUp .3s ease';
   notif.innerHTML=`<div style="font-size:9px;font-weight:700;color:#3C1E1E;margin-bottom:3px">📱 알림톡 발송 완료</div><div style="font-size:10px;color:#3C1E1E">${who}님 휴대폰으로 초대 링크 발송<br>인증 대기 중...</div>`;
   document.getElementById('dynamic-panel').appendChild(notif);
+  // 1초 후 인증하기 팝업
+  setTimeout(()=>{
+    showActionPopup('🔐','인증하기를 클릭하세요',
+      '박대표님 폰 화면에서<br><b>[인증하기 ▶]</b> 버튼을 직접 눌러주세요.',
+      '확인',
+      null,   // 액션 없음 - 팝업만 닫힘
+      false);
+  },1000);
 }
 
 // ── AUTH ──
@@ -1083,9 +1322,32 @@ function doAuth(){
   },1200);
 }
 
-// ── WARN ──
-function showWarn(){document.getElementById('warn-ov').style.display='block';document.getElementById('warn-toast').style.display='block';}
-function closeWarn(){document.getElementById('warn-ov').style.display='none';document.getElementById('warn-toast').style.display='none';}
+// ── WARN (폰 + 워크스페이스 동시) ──
+function showWarnBoth(){
+  // 폰: 경고 토스트
+  document.getElementById('warn-ov').style.display='block';
+  document.getElementById('warn-toast').style.display='block';
+  // 워크스페이스: 차단 시스템 메시지
+  const wm=document.getElementById('ws-msgs');
+  const el=document.createElement('div');
+  el.className='ws-sys';
+  el.style.cssText='background:#FEF2F2;color:#DC2626;border:1px solid #FCA5A5;border-radius:8px;padding:7px 12px;margin:6px 0';
+  el.innerHTML='🚫 <b>개인정보 전송 차단</b> — 박대표님의 메시지가 자동 차단되었습니다. 비즈폼으로 안내해 주세요.';
+  wm.appendChild(el);
+  // 폰: 차단 알림
+  const pm=document.getElementById('p-msgs');
+  const pe=document.createElement('div');
+  pe.className='p-sep';
+  pe.style.cssText='background:#FEF2F2;color:#DC2626;border:1px dashed #FCA5A5;font-size:10px';
+  pe.textContent='🚫 메시지가 차단되었습니다 — 비즈폼으로 접수해 주세요';
+  pm.appendChild(pe);
+  scrollAll();
+}
+function showWarn(){showWarnBoth();}
+function closeWarn(){
+  document.getElementById('warn-ov').style.display='none';
+  document.getElementById('warn-toast').style.display='none';
+}
 
 // ── BIZFORM ──
 function openBf(){if(!S.authDone)return;showLayer('pl-bf');}
@@ -1117,6 +1379,29 @@ function submitBf(){
       scrollAll();markDone(4);gotoScene(5);
     },1200);
   },600);
+}
+
+// ── SCRIPT PANEL (우측 패널 - YouTube 스크립트처럼) ──
+function updateScriptPanel(){
+  const sc=SCRIPTS[S.scene];
+  const box=document.getElementById('hint-box');
+  if(!box||!sc)return;
+  const roleLabel={'g':'📱 박대표','k':'💬 박대표 (카카오)','w':'⚠️ 박대표 (차단)','b':'🖥 김경화 BR','a':'👔 최센터장'};
+  const roleColor={'g':'#5B3FE4','k':'#F59E0B','w':'#DC2626','b':'#2C3E50','a':'#0C5460'};
+  box.innerHTML=sc.lines.map((chip,idx)=>{
+    const isDone=idx<S.globalChipIdx;
+    const isActive=idx===S.globalChipIdx;
+    const color=roleColor[chip.type]||'#666';
+    const label=roleLabel[chip.type]||'';
+    const text=chip.text.length>55?chip.text.slice(0,54)+'…':chip.text;
+    return `<div style="display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px solid #F0F3FA;${isActive?'':'opacity:'+(isDone?'0.5':'0.3')}">
+      <div style="font-size:15px;flex-shrink:0;margin-top:1px">${isDone?'✅':isActive?'▶':'○'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:700;color:${color};margin-bottom:2px">${label}</div>
+        <div style="font-size:11px;color:${isActive?'#1A1A2E':'#6B7280'};line-height:1.5;font-weight:${isActive?'600':'400'}">${text}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── RIGHT PANEL ──
@@ -1175,11 +1460,47 @@ function filterTf(el,f){document.querySelectorAll('.tf').forEach(b=>b.classList.
 function jumpToMsg(id){showLayer('pl-chat');if(!id)return;setTimeout(()=>{const el=document.getElementById(id);if(el){el.style.background='#FFD700';el.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>{el.style.background='';},1500);}},300);}
 
 // ── SECRET ──
+// ── 비밀 메시지 수동 전송 ──
+function sendSecretMsg(){
+  const inp=document.getElementById('secret-msg-inp');
+  const text=(inp&&inp.value.trim())||'박대표님, 이번 분기 우대 수수료율 [2.15%] 특별 적용 안내드립니다.';
+  document.getElementById('secret-input-card')?.remove();
+
+  // 1. 워크스페이스 채팅에 비밀 메시지 카드 표시
+  const wm=document.getElementById('ws-msgs');
+  const cast=C['김경화'];
+  const t=gt();
+  const wd=document.createElement('div');wd.className='ws-mr s';
+  wd.innerHTML=`<div class="ws-mc"><div class="ws-sec-bbl">🔒 <b>비밀 메시지 전송 완료</b><br>${text}<br><span style="font-size:10px;color:#888">박대표님에게만 전달 · 타 AG사 비공개</span></div><div class="ws-meta" style="justify-content:flex-end"><span>${t}</span></div></div><div class="ws-av" style="background:${cast.c}">${cast.i}</div>`;
+  wm.appendChild(wd);
+  addSys('⚙ 다른 참여자에게는: "🔒 비밀 메시지 — 특정 참여자에게만 전달된 메시지입니다"');
+
+  // 2. 박대표 폰에 🔒 잠긴 버블 표시 (탭하면 공개)
+  const secId='sec-'+Date.now();
+  S.lastSecretId=secId;
+  S._secretRevealText=text;
+  const pm=document.getElementById('p-msgs');
+  const pd=document.createElement('div');pd.className='pmr';
+  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="p-locked" id="${secId}" onclick="revealSecretManual('${secId}')"><span class="lock-ico">🔒</span><b>비밀 메시지가 도착했습니다</b><div class="lock-hint">탭하여 확인하세요</div></div><div class="pmeta"><span>${t}</span></div></div>`;
+  pm.appendChild(pd);
+  scrollAll();
+
+  // 3. chipDone → Scene 7 전환
+  if(S._secretCb){const f=S._secretCb;S._secretCb=null;f();}
+}
+function revealSecretManual(id){
+  const el=document.getElementById(id);if(!el||el.classList.contains('revealed'))return;
+  el.classList.add('revealed');
+  const text=S._secretRevealText||'박대표님, 이번 분기 우대 수수료율 [2.15%] 특별 적용 안내드립니다.';
+  el.innerHTML=`<span style="font-size:11px">🔓 <b style="color:#C2185B">비밀 메시지 확인</b></span><br>${text}<br><span style="font-size:10px;color:#888">타 AG사에는 비공개입니다.</span>`;
+}
+
 function sendLockedSecret(){
   const t=gt(),cast=C['김경화'];
   const secId='sec-'+Date.now();
+  S.lastSecretId=secId;
   const pd=document.createElement('div');pd.className='pmr';
-  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="p-locked" id="${secId}" onclick="revealSecret('${secId}')"><span class="lock-ico">🔒</span><b>비밀 메시지가 도착했습니다</b><div class="lock-hint">탭하여 확인하세요</div></div><div class="pmeta"><span>${t}</span></div></div>`;
+  pd.innerHTML=`<div class="pavt" style="background:${cast.c}">${cast.i}</div><div class="pcol"><div class="psender">${cast.l}</div><div class="p-locked" id="${secId}" onclick="revealAndAdvance('${secId}')"><span class="lock-ico">🔒</span><b>비밀 메시지가 도착했습니다</b><div class="lock-hint">탭하여 확인하세요</div></div><div class="pmeta"><span>${t}</span></div></div>`;
   document.getElementById('p-msgs').appendChild(pd);
   const wd=document.createElement('div');wd.className='ws-mr s';
   wd.innerHTML=`<div class="ws-mc"><div class="ws-sec-bbl">🔒 <b>비밀 메시지 전송 완료</b><br>박대표님, 이번 분기 우대 수수료율 <b>[2.15%]</b> 특별 적용 안내드립니다.<br><span style="font-size:10px;color:#888">타 AG사에는 비공개</span></div><div class="ws-meta" style="justify-content:flex-end"><span>${t}</span></div></div><div class="ws-av" style="background:${cast.c}">${cast.i}</div>`;
@@ -1191,6 +1512,10 @@ function revealSecret(id){
   const el=document.getElementById(id);if(!el||el.classList.contains('revealed'))return;
   el.classList.add('revealed');
   el.innerHTML=`<span style="font-size:11px">🔓 <b style="color:#C2185B">비밀 메시지 확인</b></span><br>박대표님, 이번 분기 우대 수수료율 <b style="color:#C2185B;font-size:13px">[2.15%]</b> 특별 적용 안내드립니다.<br><span style="font-size:10px;color:#888">타 AG사에는 비공개입니다.</span>`;
+}
+function revealAndAdvance(id){
+  revealSecret(id);
+  // 버블 탭해도 동작하도록 유지 (자동 전환이 이미 예약됨)
 }
 function openSecret(){
   document.getElementById('sec-to').innerHTML=S.role==='br'?'수신자: <b>박대표 (에이원오토 · 단체방 내 전용)</b>':'수신자: <b>김경화 (우리금융캐피탈 WON TALK)</b>';
@@ -1205,9 +1530,8 @@ function sendSecret(){
 }
 
 // ── NOTICE ──
-function pinNotice(){
-  const text=prompt('공지 내용:','[필독] 7월 자동차금융 기준금리 변경 안내 (2.3% → 2.15%)');
-  if(!text)return;
+function pinNotice(cb){
+  const text='[필독] 7월 자동차금융 기준금리 변경 안내 (2.3% → 2.15%)';
   S.noticePinned=true;
   document.getElementById('p-notice-txt').textContent=text;
   document.getElementById('p-notice').classList.add('show');
@@ -1215,9 +1539,28 @@ function pinNotice(){
   document.getElementById('ws-nbar').classList.add('show');
   document.getElementById('ws-read-cnt').textContent='집계 중...';
   addSys('⚙ 공지 등록 완료 — 파트너 4,000명 알림톡 발송 중',true);
-  updateRight('read');markDone(7);setTimeout(()=>showNextBtn(true),2500);
+
+  // 워크스페이스 채팅: 공지 확인 카드 (팝업 대신 인라인으로)
+  const wm=document.getElementById('ws-msgs');
+  const card=document.createElement('div');
+  card.style.cssText='background:linear-gradient(135deg,#5B3FE4,#7B5FFF);color:#fff;border-radius:12px;padding:16px 18px;margin:8px 0;text-align:center;box-shadow:0 4px 20px rgba(91,63,228,.4);animation:fadeUp .4s ease';
+  card.innerHTML='<div style="font-size:22px;margin-bottom:6px">📢</div><div style="font-size:14px;font-weight:800;margin-bottom:5px">금리 변경 공지 등록 완료</div><div style="font-size:12px;opacity:.9;line-height:1.6">기준금리: 2.3% → <b>2.15%</b><br>파트너 4,000명에게 알림톡이 발송됩니다.</div>';
+  wm.appendChild(card);
+  scrollAll();
+
+  updateRight('read');
+  markDone(7);
+  if(cb)setTimeout(cb,400);
+
+  // 즉시 3820명 확인 완료 메시지 (0.8초 후)
+  setTimeout(()=>{
+    const el=document.createElement('div');
+    el.style.cssText='background:#D1FAE5;border:1px solid #6EE7B7;border-radius:9px;padding:9px 14px;margin:6px 0;font-size:12px;color:#065F46;font-weight:600;animation:fadeUp .4s ease';
+    el.innerHTML='✅ <b>3,820명 확인 완료</b> (전체 4,000명 중 95.5%) — 미열람 180명 재알림 발송 준비됨';
+    wm.appendChild(el);scrollAll();
+  },800);
 }
-function showReadPanel(){if(S.noticePinned)updateRight('read')}
+function showReadPanel(){if(S.noticePinned)updateRight('read');}
 function startReadCnt(){
   S.readN=0;if(S.readIv)clearInterval(S.readIv);
   const tgt=3820;
@@ -1296,17 +1639,90 @@ function showDashTab(tab){
 }
 function showAGDetail(n){
   const d=AG_D.find(a=>a.n===n);if(!d)return;
-  document.getElementById('ws-right').innerHTML=`<div class="rp-title">${n} 상세</div><div class="detail-card"><div class="detail-title">${n}</div><div class="detail-stat"><span class="detail-lbl">이번 주 신청</span><span class="detail-val">${d.cnt}건</span></div><div class="detail-stat"><span class="detail-lbl">처리율</span><span class="detail-val">${d.rate}</span></div><div class="detail-stat"><span class="detail-lbl">평균 응대</span><span class="detail-val">${d.spd}</span></div><div style="margin-top:9px"><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px">파트너별 신청</div>${d.ptrs.map(p=>`<div class="detail-li"><span>${p}</span></div>`).join('')}</div></div><div style="font-size:10px;padding:8px;background:#F8F5FF;border-radius:8px;border:1px solid #EDE9FF;color:var(--muted);line-height:1.6;margin-top:4px">이 데이터를 기반으로 파트너 인센티브 정책을 수립하세요.</div>`;
+  document.getElementById('ws-right').innerHTML=`
+    <div style="display:flex;flex-direction:row;height:100%;overflow:hidden">
+      <!-- 좌: 수치 요약 -->
+      <div style="width:220px;flex-shrink:0;border-right:1px solid #F0F3FA;padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto">
+        <div style="font-size:13px;font-weight:800;color:var(--p)">${n}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="background:#F8F5FF;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--p)">${d.cnt}</div>
+            <div style="font-size:10px;color:var(--muted)">이번 주 신청</div>
+          </div>
+          <div style="background:#F0FFF8;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--acc)">${d.rate}</div>
+            <div style="font-size:10px;color:var(--muted)">처리율</div>
+          </div>
+        </div>
+        <div style="background:#F3F4F6;border-radius:8px;padding:9px">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:3px">평균 응대 시간</div>
+          <div style="font-size:14px;font-weight:700">${d.spd}</div>
+        </div>
+        <div style="font-size:10px;padding:8px;background:#F8F5FF;border-radius:8px;border:1px solid #EDE9FF;color:var(--muted);line-height:1.6">인센티브 정책 수립 근거 데이터</div>
+      </div>
+      <!-- 우: 파트너별 신청 -->
+      <div style="flex:1;padding:12px;overflow-y:auto">
+        <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">파트너별 신청 건수</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${d.ptrs.map((p,i)=>{
+            const cnt=parseInt(p.match(/\d+/)?.[0]||'0');
+            const maxCnt=parseInt(d.ptrs[0].match(/\d+/)?.[0]||'1');
+            const pct=Math.round(cnt/maxCnt*100);
+            return `<div style="background:#F8F9FA;border-radius:8px;padding:9px 11px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:11px;font-weight:600">${p.split(' ')[0]}</span>
+                <span style="font-size:11px;color:var(--p);font-weight:700">${cnt}건</span>
+              </div>
+              <div style="background:#E5E7EB;border-radius:4px;height:6px">
+                <div style="width:${pct}%;background:${d.c};height:6px;border-radius:4px;transition:.4s"></div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>`;
 }
 function showBRDetail(n){
   const d=BR_D.find(b=>b.n===n);if(!d)return;
-  document.getElementById('ws-right').innerHTML=`<div class="rp-title">${n} 상세</div><div class="detail-card"><div class="detail-title" style="${d.warn?'color:var(--danger)':''}">${n} ${d.warn?'⚠':'✅'}</div><div class="detail-stat"><span class="detail-lbl">이번 주 처리</span><span class="detail-val">${d.cnt}건</span></div><div class="detail-stat"><span class="detail-lbl">담당 AG</span><span class="detail-val">${d.ag}명</span></div><div class="detail-stat"><span class="detail-lbl">응대속도</span><span class="detail-val">${d.spd}</span></div>${d.ch.length?`<div style="margin-top:9px"><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px">담당 채널</div>${d.ch.map(c=>`<div class="detail-li"><span>${c}</span></div>`).join('')}</div>`:''}${d.warn?`<div style="margin-top:8px;padding:8px;background:#FFF3CD;border-radius:8px;font-size:11px;color:#856404">⚠ 응대 지연 14시간 초과 — 즉시 확인 필요</div>`:''}</div>`;
+  document.getElementById('ws-right').innerHTML=`
+    <div style="display:flex;flex-direction:row;height:100%;overflow:hidden">
+      <!-- 좌: 수치 요약 -->
+      <div style="width:220px;flex-shrink:0;border-right:1px solid #F0F3FA;padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto">
+        <div style="font-size:13px;font-weight:800;color:${d.warn?'var(--danger)':'var(--p)'}">${n} ${d.warn?'⚠':'✅'}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="background:#F8F5FF;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--p)">${d.cnt}</div>
+            <div style="font-size:10px;color:var(--muted)">이번 주 처리</div>
+          </div>
+          <div style="background:#F0FFF8;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--acc)">${d.ag}</div>
+            <div style="font-size:10px;color:var(--muted)">담당 AG</div>
+          </div>
+        </div>
+        <div style="background:${d.warn?'#FFF3CD':'#F3F4F6'};border-radius:8px;padding:9px;${d.warn?'border:1px solid #FDE68A':''}">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:3px">평균 응대 속도</div>
+          <div style="font-size:14px;font-weight:700;color:${d.warn?'#92400E':'inherit'}">${d.spd}</div>
+        </div>
+        ${d.warn?`<div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:8px;padding:9px;font-size:11px;color:#DC2626">⚠ 응대 지연 14시간 초과 — 즉시 확인 필요</div>`:''}
+      </div>
+      <!-- 우: 담당 채널 -->
+      <div style="flex:1;padding:12px;overflow-y:auto">
+        <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">담당 채널</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${d.ch.length?d.ch.map(c=>`<div style="background:#F8F5FF;border:1px solid #EDE9FF;border-radius:8px;padding:9px 11px;font-size:12px;font-weight:600;color:var(--p)">🏢 ${c}</div>`).join(''):'<div style="color:var(--muted);font-size:11px">담당 채널 없음</div>'}
+        </div>
+      </div>
+    </div>`;
 }
 
 // ── INIT ──
 initWonTalk();
+setWsRole('br');
 gotoScene(1);
-setRole('guest');
+showNextBtn(false);
+updateScriptPanel();
+const fi=document.getElementById('p-fixed-inp');
+if(fi)fi.style.display='flex';
 </script>
 </body>
 </html>
